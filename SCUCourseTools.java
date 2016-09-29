@@ -119,7 +119,7 @@ public class SCUCourseTools {
 
     private static void help() {
         try {
-            File helpFile = new File("help.txt");
+            File helpFile = new File("docs/help.txt");
             if (helpFile.exists()) {
                 BufferedReader br = new BufferedReader(new FileReader(helpFile.getAbsoluteFile()));
                 int i = 0;
@@ -646,7 +646,7 @@ public class SCUCourseTools {
     private static void findMinor(String dept) {
         int overflow = 0;
         try {
-            File minorFile = new File("degreeReqs/"+dept+"minor.txt");
+            File minorFile = new File("docs/degreeReqs/"+dept+"minor.txt");
             if (minorFile.exists()) {
                 BufferedReader br = new BufferedReader(new FileReader(minorFile.getAbsoluteFile()));
                 int i = 0;
@@ -669,7 +669,7 @@ public class SCUCourseTools {
     private static void findMajor(String dept) {
         int overflow = 0;
         try {
-            File minorFile = new File("degreeReqs/"+dept+"major.txt");
+            File minorFile = new File("docs/degreeReqs/"+dept+"major.txt");
             if (minorFile.exists()) {
                 BufferedReader br = new BufferedReader(new FileReader(minorFile.getAbsoluteFile()));
                 int i = 0;
@@ -896,7 +896,7 @@ public class SCUCourseTools {
 
     private static void loadSW(int termID) {
         try {
-            File swCourseFile = new File("swcourses" + termID + ".txt");
+            File swCourseFile = new File("docs/swcourses" + termID + ".txt");
             if (swCourseFile.exists()) {
                 BufferedReader br = new BufferedReader(new FileReader(swCourseFile.getAbsoluteFile()));
                 int i = 0;
@@ -923,7 +923,7 @@ public class SCUCourseTools {
             courseIDs.add(arr[0].substring(1,6));
         }
         try {
-            File swCourseFile = new File("swcourses" + termID + ".txt");
+            File swCourseFile = new File("docs/swcourses" + termID + ".txt");
             String writeMe = "";
             if (!swCourseFile.exists()) {
                 swCourseFile.createNewFile();
@@ -944,8 +944,8 @@ public class SCUCourseTools {
 
     private static void getTentative(int termID) {
         try {
-            File tentFile = new File("tentative" + termID + ".txt");
-            File swCourseFile = new File("courseInfo" + termID + ".txt");
+            File tentFile = new File("docs/tentative" + termID + ".txt");
+            File swCourseFile = new File("docs/courseInfo" + termID + ".txt");
             if (!swCourseFile.exists()) {
                 swCourseFile.createNewFile();
             }
@@ -1130,7 +1130,7 @@ public class SCUCourseTools {
     private static void scrapeToFile(int termID, int firstCourse) {
         int lastCourse = firstCourse+3000;
         try {
-            File courseInfo = new File("courseInfo" + termID + ".txt");
+            File courseInfo = new File("docs/courseInfo" + termID + ".txt");
             if (!courseInfo.exists()) {
                 courseInfo.createNewFile();
             }
@@ -1172,7 +1172,7 @@ public class SCUCourseTools {
     private static void loadData(int termID, int firstCourse) {
         int lastCourse = firstCourse+3000;
         try {
-            File courseInfo = new File("courseInfo" + termID + ".txt");
+            File courseInfo = new File("docs/courseInfo" + termID + ".txt");
             if (courseInfo.exists()) {
                 BufferedReader br = new BufferedReader(new FileReader(courseInfo.getAbsoluteFile()));
                 int i = 0;

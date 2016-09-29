@@ -1,0 +1,25 @@
+Welcome to SCU Course Tools!
+
+This program is designed to give you several tools to give a much more
+functional approach to navigating Course Avail and choosing your courses. Here
+are the commands you can use with it:
+
+	help (h):		view this screen
+	quit (q):		quit this application
+	seatwatch (sw):		open the seats remaining viewer for your watchlist
+	search (f):		search for a class by department (-d DEPT) or term (-t Qyy), more coming soon
+	add xxxxx yyyyy:	add specified courses to watchlist, can add multiple at a time
+	remove xxxxx yyyyy:	remove specified courses from watchlist, can remove multiple at a time
+	update Qyy:		update the course database for the specified quarter
+	*details xxxxx:		get details on specified course
+	*doubledip (dd) Qyy:	get info on double dippable core classes for specified term
+
+	*Not completely functional at the moment
+	custom core reqs coming later
+
+
+And my testing stuff that's on here for now:
+
+	mdd:			get info on double dippable core classes that i still need
+
+That's all for now. Stay tuned for more features!
