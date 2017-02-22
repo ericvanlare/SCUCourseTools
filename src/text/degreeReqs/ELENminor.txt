@@ -1,0 +1,35 @@
+An academic minor in Electrical Engineering requires eight courses. A student's minor program must include at least two courses that are no used to satisfy any part of the student's major program.:
+
+Three required courses:
+The minor program must include the following courses and their associated laboratories:
+	ELEN 021, 021L - Introduction to Logic Design
+	ELEN 050, 050L - Electric Circuits I
+	ELEN 115, 115L - Electronic Circuits I
+
+Two optional courses:
+Two courses must be selected from the following four courses:
+	ELEN 100, 100L - Electrical Circuits II
+	ELEN 104, 104L - Electromagnetics I
+	ELEN 110, 110L - Linear Systems
+	ELEN 151, 151L - Semiconductor Devices
+
+Three electives:
+Three electives must be selected from upper division ELEN courses excluding Co-op and the senior design sequence.
+
+Notes about the relationship to other programs:
+Computer Engineering:
+	ELEN 21, 50, and 153 are required for the COEN major
+	ELEN 115 is an accepted technical elective in COEN
+	ELEN 123, 127, and 133 are accepted technical electives in COEN
+	ELEN 160 satisfies a university core requirement
+
+Bioengineering:
+	ELEN 21 and 50 are required for the BIOE major
+	ELEN 115 is an accepted technical elective in BIOE.
+	ELEN 116, 130, 152, and 156 are accepted technical electives in BIOE.
+	ELEN 160 satisfies a university core requirement
+
+Mechanical Engineering:
+	ELEN 50 is required for the MECH major
+	ELEN 123 is crosslisted with MECH
+	ELEN 160 satisfies a university core requirement

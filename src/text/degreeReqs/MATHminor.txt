@@ -1,0 +1,6 @@
+Lower Division Courses
+	•	Math 11, 12, 13, 21 (or 14 after Fall 2009) (Calculus I - IV)
+	•	Math 52 (Abstract Algebra) or Math 53 (Linear Algebra)
+
+Upper Division Courses
+A student minoring in mathematics must take three 5-unit upper-division courses in mathematics, but no more than one course from MATH 165 and 166. In place of MATH 165 or 166, a student may select an upper-division computer science course. All upper-division courses must be taken from the Department of Mathematics and Computer Science and cannot include Math 100.

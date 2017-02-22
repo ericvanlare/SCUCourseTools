@@ -1,75 +1,71 @@
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Scanner;
 import java.util.Collections;
 import java.io.*;
 import java.lang.NumberFormatException;
 import java.lang.ArrayIndexOutOfBoundsException;
-import java.math.*;
 
 /**
- * Created by eric on 4/24/15.
+ *
+ *
+ * @author Eric Van Lare
  */
 public class SCUCourseTools {
-    private static final char ESC = 27;
-    private static int WINDOW_SPACES = 52;
-    private static int WINDOW_COLS = 209;
-    private static ArrayList<String> displayMe;
-    private static String input;
-    private static Scanner scan;
-    private static ArrayList<String[]> seatWatchCourses;
-    private static Hashtable<String,String[][]> allCoursesAndTerms;
-    private static Hashtable<String,int[]> quarterInfo;
-    private static String[] quarterNames = {"F16","S16","W16","F15","S15","W15","F14"};
-    private static int[][] quarterIDs= {{3800,42000,45000},
-                                        {3740,34000,37000},
-                                        {3720,30000,33000},
-                                        {3700,26000,29000},
-                                        {3640,18000,21000},
-                                        {3620,14000,17000},
-                                        {3600,10000,13000}};
-    private static String[][] descriptions = {{"Course","Title","ID","Instructor","Day","Times","Core"},
-                                              {"Course","Title","ID","Instructor","Day","Times","Seats Remaining"}};
-    private static int[][] spaces = {{10,34,5,22,4,11,30},{10,34,5,22,4,11,20}};
+    private ArrayList<String> displayMe;
+    private String input;
+    private ArrayList<String[]> seatWatchCourses;
+    private Hashtable<String,String[][]> allCoursesAndTerms;
+    private Hashtable<String,int[]> quarterInfo;
+    private String[] quarterNames = {"S17","W17","F16","S16","W16","F15","S15","W15","F14"};
+    private int[][] quarterIDs= {{3840,50000,53000},
+                                {3820,46000,49000},
+                                {3800,42000,45000},
+                                {3740,34000,37000},
+                                {3720,30000,33000},
+                                {3700,26000,29000},
+                                {3640,18000,21000},
+                                {3620,14000,17000},
+                                {3600,10000,13000}};
+    private String[][] descriptions = {{"Course","Title","ID","Instructor","Day","Times","Core"},
+            {"Course","Title","ID","Instructor","Day","Times","Seats Remaining"}};
 
-    private static ArrayList<ArrayList<String>> pages;
-    private static int page;
-    
     //change these when adding a new quarter
-    private static int currentQuarter;
-    private static String currentQuarterName;
-    private static int currentFirstCourse;
+    private int currentQuarter;
+    private String currentQuarterName;
+    private int currentFirstCourse;
 
-    private static String lastCommand;
-    private static String secondLastCommand;
-    private static String[] lastArgs;
-    private static String[] secondLastArgs;
-    private static ArrayList<String> helpStrs;
-    private static Console c;
+    private String lastCommand;
+    private String secondLastCommand;
+    private String[] lastArgs;
+    private String[] secondLastArgs;
+    private ArrayList<String> helpStrs;
 
-    private static ArrayList<ArrayList<String>> schedules;
+    private int[][] spaces = {{10,34,5,22,4,11,30},{10,34,5,22,4,11,20}};
 
-    public static void main(String[] args) {
+    private ArrayList<ArrayList<String>> schedules;
+
+    private ShellDisplay display;
+
+    public SCUCourseTools() {
         setup();
         run();
     }
 
-    private static void setup() {
+    public static void main(String[] args) {
+        SCUCourseTools program = new SCUCourseTools();
+    }
+
+    private void setup() {
+
         currentQuarter = quarterIDs[0][0];
         currentQuarterName = quarterNames[0];
         currentFirstCourse = quarterIDs[0][1];
 
-        c = System.console();
-        //c.writer().print(ESC + "[2J");
-        //c.flush();
+        display = new ShellDisplay();
 
-        scan = new Scanner(System.in);
         displayMe = new ArrayList<String>();
         seatWatchCourses = new ArrayList<String[]>();
         allCoursesAndTerms = new Hashtable<String,String[][]>();
-
-        pages = new ArrayList<ArrayList<String>>();
-        page = 0;
 
         quarterInfo = new Hashtable<String,int[]>();
         for (int i=0; i<quarterIDs.length; i++) {
@@ -78,10 +74,7 @@ public class SCUCourseTools {
             loadData(quarterIDs[i][0],quarterIDs[i][1]);
         }
 
-        String os = System.getProperty("os.name").toLowerCase();
-        if (os.contains("mac")) {
-            getLinesAndCols();
-        }
+        display.updateRowsAndCols();
 
         lastCommand = "";
         secondLastCommand = "";
@@ -95,36 +88,14 @@ public class SCUCourseTools {
         help();
     }
 
-    private static void getLinesAndCols() {
-        String s;
-        String a="";
+    private void help() {
         try {
-            Process p = Runtime.getRuntime().exec(new String[] {"bash", "-c", "tput lines 2> /dev/tty" });
-            BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            while ((s = stdInput.readLine()) != null) {
-                a+=s;
-            }
-            WINDOW_SPACES = (new Integer(a)).intValue()-1;
-        } catch (IOException e) {}
-        try {
-            Process p = Runtime.getRuntime().exec(new String[] {"bash", "-c", "tput cols 2> /dev/tty" });
-            BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            while ((s = stdInput.readLine()) != null) {
-                a+=s;
-            }
-            a=a.substring(2,5);
-            WINDOW_COLS = (new Integer(a)).intValue()-1;
-        } catch (IOException e) {}
-    }
-
-    private static void help() {
-        try {
-            File helpFile = new File("docs/help.txt");
+            File helpFile = new File("text/help.txt");
             if (helpFile.exists()) {
                 BufferedReader br = new BufferedReader(new FileReader(helpFile.getAbsoluteFile()));
                 int i = 0;
                 for (String line = br.readLine(); line != null; line = br.readLine()){
-                    displayMe.add(line);
+                    display.addLine(line);
                     helpStrs.add(line);
                 }
                 br.close();
@@ -132,13 +103,13 @@ public class SCUCourseTools {
         } catch (IOException exception) {
             exception.printStackTrace();
         }
-        display();
+        display.display();
     }
 
-    private static void run() {
+    private void run() {
         while (true) {
             try {
-                input = c.readLine();//scan.nextLine();
+                input = display.readLine();
                 String[] allLines = input.split(" ");
                 String argc = allLines[0];
                 String[] argv = {};
@@ -150,14 +121,14 @@ public class SCUCourseTools {
                 }
                 doAction(argc,argv);
             } catch (ArrayIndexOutOfBoundsException e) {
-                displayMe.add("Invalid command");
-                display();
+                display.addLine("Invalid command");
+                display.display();
             }
         }
     }
 
-    private static void doAction(String argc, String[] argv) {
-        getLinesAndCols();
+    private void doAction(String argc, String[] argv) {
+        display.updateRowsAndCols();
         if (argc.equals("")) {
             argc = lastCommand;
             argv = lastArgs;
@@ -168,39 +139,34 @@ public class SCUCourseTools {
         }
         if (argc.equals("help") || argc.equals("h")) {
             if (argv.length > 0) {
-                displayMe.add("Error: too many arguments for help command");
-                displayMe.add("\t\t\"help\" OR \"h\"");
-                display();
+                display.addLine("Error: too many arguments for help command");
+                display.addLine("\t\t\"help\" OR \"h\"");
+                display.display();
             }
-            else 
+            else
                 help();
         }
         else if (argc.equals("quit") || argc.equals("q")) {
             updateFile(currentQuarter);
-            clearEverything();
-            c.writer().println(ESC+"[1;1H");
-            c.flush();
+            display.quit();
             System.exit(0);
         }
         //seatwatcher commands
         else if (argc.equals("tentative") || argc.equals("t")) {
             if (argv.length != 1) {
-                displayMe.add("Error: invalid number of arguments for tentative command");
-                displayMe.add("\t\t\"help\" OR \"h\"");
-                display();
+                display.addLine("Error: invalid number of arguments for tentative command");
+                display.addLine("\t\t\"help\" OR \"h\"");
+                display.display();
             }
             else {
                 getTentative((new Integer(argv[0])).intValue());
             }
         }
-        else if (argc.equals("me")) {
-            meTask();
-        }
         else if (argc.equals("update")) {
             if (argv.length != 1) {
-                displayMe.add("Error: invalid number of arguments for update command");
-                displayMe.add("\t\t\"update Qyy\" (e.g. \"update F15\")");
-                display();
+                display.addLine("Error: invalid number of arguments for update command");
+                display.addLine("\t\t\"update Qyy\" (e.g. \"update F15\")");
+                display.display();
             }
             else {
                 boolean isProper = false;
@@ -213,52 +179,52 @@ public class SCUCourseTools {
                 if (isProper)
                     scrapeToFile(quarterInfo.get(qName)[0],quarterInfo.get(qName)[1]);
                 else {
-                    displayMe.add("Error: invalid argument for update command");
-                    displayMe.add("\t\t\"update Qyy\" (e.g. \"update F15\")");
-                    display();
+                    display.addLine("Error: invalid argument for update command");
+                    display.addLine("\t\t\"update Qyy\" (e.g. \"update F15\")");
+                    display.display();
                 }
             }
         }
         else if (argc.equals("seatwatcher") || argc.equals("sw")) {
             if (argv.length > 0) {
-                displayMe.add("Error: too many arguments for seatwatcher command");
-                displayMe.add("\t\t\"seatwatcher\" OR \"sw\"");
-                display();
+                display.addLine("Error: too many arguments for seatwatcher command");
+                display.addLine("\t\t\"seatwatcher\" OR \"sw\"");
+                display.display();
             }
-            else 
+            else
                 seatWatcher();
         }
         else if (argc.equals("mycourses") || argc.equals("mc")) {
             if (argv.length > 0) {
-                displayMe.add("Error: too many arguments for seatwatcher command");
-                displayMe.add("\t\t\"seatwatcher\" OR \"sw\"");
-                display();
+                display.addLine("Error: too many arguments for seatwatcher command");
+                display.addLine("\t\t\"seatwatcher\" OR \"sw\"");
+                display.display();
             }
-            else 
+            else
                 showMyCourses();
         }
         else if (argc.equals("schedule") || argc.equals("sch")) {
-            if (argv.length < 1) { 
-                displayMe.add("Error: too few arguments for schedule command");
-                displayMe.add("\t\t\"schedule scheduleName xxxxx yyyyy zzzzz\" OR \"sch scheduleName xxxxx yyyyy zzzzz\"");
-                displayMe.add("Alternatively, if you have already defined a scheduleName:");
-                displayMe.add("\t\t\"schedule scheduleName\" OR \"sch scheduleName\"");
-                display();
+            if (argv.length < 1) {
+                display.addLine("Error: too few arguments for schedule command");
+                display.addLine("\t\t\"schedule scheduleName xxxxx yyyyy zzzzz\" OR \"sch scheduleName xxxxx yyyyy zzzzz\"");
+                display.addLine("Alternatively, if you have already defined a scheduleName:");
+                display.addLine("\t\t\"schedule scheduleName\" OR \"sch scheduleName\"");
+                display.display();
             }
             else
                 schedule(argv);
         }
         else if (argc.equals("add")) {
             if (argv.length < 1) {
-                displayMe.add("Error: invalid number of arguments for add command");
-                displayMe.add("\t\t\"add xxxxx\" (e.g. \"add 27000\")");
-                display();
+                display.addLine("Error: invalid number of arguments for add command");
+                display.addLine("\t\t\"add xxxxx\" (e.g. \"add 27000\")");
+                display.display();
             }
             for (int i=0; i<argv.length; i++) {
                 if (argv[i].length() != 5) {
-                    displayMe.add("Error: invalid size for argument of add command");
-                    displayMe.add("\t\t\"add xxxxx\" (e.g. \"add 27000\")");
-                    display();
+                    display.addLine("Error: invalid size for argument of add command");
+                    display.addLine("\t\t\"add xxxxx\" (e.g. \"add 27000\")");
+                    display.display();
                 }
                 else {
                     addToSeatWatch((new Integer(argv[i])).intValue(),currentQuarter,currentFirstCourse);
@@ -268,15 +234,15 @@ public class SCUCourseTools {
         }
         else if (argc.equals("remove")) {
             if (argv.length < 1) {
-                displayMe.add("Error: invalid number of arguments for remove command");
-                displayMe.add("\t\t\"remove xxxxx\" (e.g. \"remove 27000\")");
-                display();
+                display.addLine("Error: invalid number of arguments for remove command");
+                display.addLine("\t\t\"remove xxxxx\" (e.g. \"remove 27000\")");
+                display.display();
             }
             for (int i=0; i<argv.length; i++) {
                 if (argv[0].length() != 5) {
-                    displayMe.add("Error: invalid size for argument of remove command");
-                    displayMe.add("\t\t\"remove xxxxx\" (e.g. \"remove 27000\")");
-                    display();
+                    display.addLine("Error: invalid size for argument of remove command");
+                    display.addLine("\t\t\"remove xxxxx\" (e.g. \"remove 27000\")");
+                    display.display();
                 }
                 else {
                     removeFromSeatWatch((new Integer(argv[i])).intValue(),currentQuarter,currentFirstCourse);
@@ -286,36 +252,25 @@ public class SCUCourseTools {
         }
         else if (argc.equals("search") || argc.equals("f")) {
             if (argv.length == 0) {
-                displayMe.add("Error: too few arguments for search command");
-                displayMe.add("\t\t\"search -q Qyy -d DEPT -n xxx -p Proflastname -i xxxxx\" " +
-                              "(e.g. search -q F15 -d COEN -n 20 -p Lewis -i 27000)");
-                display();
+                display.addLine("Error: too few arguments for search command");
+                display.addLine("\t\t\"search -q Qyy -d DEPT -n xxx -p Proflastname -i xxxxx\" " +
+                        "(e.g. search -q F15 -d COEN -n 20 -p Lewis -i 27000)");
+                display.display();
             }
             else if (argv.length%2 != 0) {
-                displayMe.add("Error: invalid number of arguments for search command");
-                displayMe.add("\t\t\"search -q Qyy -d DEPT -n xxx -p Proflastname -i xxxxx\" " +
-                              "(e.g. search -q F15 -d COEN -n 20 -p Lewis -i 27000)");
-                display();
+                display.addLine("Error: invalid number of arguments for search command");
+                display.addLine("\t\t\"search -q Qyy -d DEPT -n xxx -p Proflastname -i xxxxx\" " +
+                        "(e.g. search -q F15 -d COEN -n 20 -p Lewis -i 27000)");
+                display.display();
             }
             else {
                 ArrayList<String[]> allCoursesEver = new ArrayList<String[]>();
-                //ArrayList<String[]> newArr = new ArrayList<String[]>();
                 for (String[][] termArr : (new ArrayList<String[][]>(allCoursesAndTerms.values()))) {
                     for (String[] courseArr : termArr) {
                         if (courseArr != null)
                             allCoursesEver.add(courseArr);
                     }
                 }
-                /*boolean quarterSpecified = false;
-                for (int i=0; i<argv.length; i++) {
-                    if (argv[i].equals("-q")) {
-                        quarterSpecified = true;
-                        allCoursesEver = findByX("quarter", allCoursesEver, argv[i+1]);
-                        i++;
-                    }
-                }
-                if (!quarterSpecified)
-                    allCoursesEver = findByX("quarter", allCoursesEver, "F15");*/
                 boolean quarterSearched = false;
                 boolean doDisplay = true;
                 for (int i=0; i<argv.length; i++) {
@@ -348,8 +303,8 @@ public class SCUCourseTools {
                         try {
                             allCoursesEver = findByX("level", allCoursesEver, argv[i+1]);
                         } catch (Error e) {
-                            displayMe.add("Error: usage unsupported for some majors");
-                            display();
+                            display.addLine("Error: usage unsupported for some majors");
+                            display.display();
                             doDisplay = false;
                             break;
                         }
@@ -361,10 +316,10 @@ public class SCUCourseTools {
                         i++;
                     }
                     else {
-                        displayMe.add("Error: invalid argument(s) for search command");
-                        displayMe.add("\t\t\"search -q Qyy -d DEPT -n xxx -p Proflastname -i xxxxx\" " +
-                                      "(e.g. search -q F15 -d COEN -n 20 -p Lewis -i 27000)");
-                        display();
+                        display.addLine("Error: invalid argument(s) for search command");
+                        display.addLine("\t\t\"search -q Qyy -d DEPT -n xxx -p Proflastname -i xxxxx\" " +
+                                "(e.g. search -q F15 -d COEN -n 20 -p Lewis -i 27000)");
+                        display.display();
                         doDisplay = false;
                         break;
                     }
@@ -379,8 +334,8 @@ public class SCUCourseTools {
         }
         else if (argc.equals("minor")) {
             if (argv.length != 1) {
-                displayMe.add("Need argument for command 'minor'");
-                display();
+                display.addLine("Need argument for command 'minor'");
+                display.display();
             }
             else {
                 findMinor(argv[0]);
@@ -388,8 +343,8 @@ public class SCUCourseTools {
         }
         else if (argc.equals("major")) {
             if (argv.length != 1) {
-                displayMe.add("Need argument for command 'major'");
-                display();
+                display.addLine("Need argument for command 'major'");
+                display.display();
             }
             else {
                 findMajor(argv[0]);
@@ -409,8 +364,8 @@ public class SCUCourseTools {
 
         }
         else {
-            displayMe.add("Please enter a valid command");
-            display();
+            display.addLine("Please enter a valid command");
+            display.display();
         }
         secondLastCommand = lastCommand;
         secondLastArgs = lastArgs;
@@ -418,7 +373,7 @@ public class SCUCourseTools {
         lastArgs = argv;
     }
 
-    private static void schedule(String[] argv) {
+    private void schedule(String[] argv) {
         if (argv.length == 1) {
             boolean isFound = false;
             for (ArrayList<String> sch : schedules) {
@@ -429,11 +384,11 @@ public class SCUCourseTools {
                 }
             }
             if (!isFound) {
-                displayMe.add("Error: could not find schedule "+argv[0]+". Please try formatting command as follows:");
-                displayMe.add("\t\t\"schedule scheduleName xxxxx yyyyy zzzzz\" OR \"sch scheduleName xxxxx yyyyy zzzzz\"");
-                displayMe.add("Alternatively, if you have already defined a scheduleName:");
-                displayMe.add("\t\t\"schedule scheduleName\" OR \"sch scheduleName\"");
-                display();
+                display.addLine("Error: could not find schedule "+argv[0]+". Please try formatting command as follows:");
+                display.addLine("\t\t\"schedule scheduleName xxxxx yyyyy zzzzz\" OR \"sch scheduleName xxxxx yyyyy zzzzz\"");
+                display.addLine("Alternatively, if you have already defined a scheduleName:");
+                display.addLine("\t\t\"schedule scheduleName\" OR \"sch scheduleName\"");
+                display.display();
             }
         }
         else {
@@ -453,11 +408,11 @@ public class SCUCourseTools {
                 }
             }
             if (isConflicting) {
-                displayMe.add("Error: classes "+conf1+" and "+conf2+" have a time conflict. Try again using the following command:");
-                displayMe.add("\t\t\"schedule scheduleName xxxxx yyyyy zzzzz\" OR \"sch scheduleName xxxxx yyyyy zzzzz\"");
-                displayMe.add("Alternatively, if you have already defined a scheduleName:");
-                displayMe.add("\t\t\"schedule scheduleName\" OR \"sch scheduleName\"");
-                display();
+                display.addLine("Error: classes "+conf1+" and "+conf2+" have a time conflict. Try again using the following command:");
+                display.addLine("\t\t\"schedule scheduleName xxxxx yyyyy zzzzz\" OR \"sch scheduleName xxxxx yyyyy zzzzz\"");
+                display.addLine("Alternatively, if you have already defined a scheduleName:");
+                display.addLine("\t\t\"schedule scheduleName\" OR \"sch scheduleName\"");
+                display.display();
             }
             else {
                 ArrayList<String> newSchedule = new ArrayList<String>();
@@ -469,7 +424,7 @@ public class SCUCourseTools {
         }
     }
 
-    private static void displaySchedule(ArrayList<String> schedule) {
+    private void displaySchedule(ArrayList<String> schedule) {
         String[] days = {"M","T","W","R","F"};
         String[][] spots = new String[39][5];
         for (int i=0; i<39; i++)
@@ -482,7 +437,7 @@ public class SCUCourseTools {
             int startM = Integer.parseInt(course.getTimes().substring(3,5));
             int endH = Integer.parseInt(course.getTimes().substring(6,8));
             int endM = Integer.parseInt(course.getTimes().substring(9,11));
-            //displayMe.add(startH+":"+startM+"-"+endH+":"+endM);
+            //display.addLine(startH+":"+startM+"-"+endH+":"+endM);
             if (startH < 8) {
                 startH += 12;
                 endH += 12;
@@ -519,7 +474,7 @@ public class SCUCourseTools {
                 }
             }
         }
-        displayMe.add("\t         Monday                Tuesday               Wednesday               Thursday               Friday");
+        display.addLine("\t         Monday                Tuesday               Wednesday               Thursday               Friday");
         for (int i=0; i<39; i++) {
             String displayLine = "\t";
             if (i%3==0) {
@@ -531,178 +486,64 @@ public class SCUCourseTools {
             for (int j=0; j<5; j++) {
                 displayLine += spots[i][j];
             }
-            displayMe.add(displayLine);
+            display.addLine(displayLine);
         }
-        /*for (int hr=8; hr<=12; hr++) {
-            for (int min=0; min<60; min+=20) {
-                String displayStr = "\t";
-                if (min == 0) {
-                    displayStr = hr+"am\t";
-                    if (hr == 12)
-                        displayStr = hr+"pm\t";
-                }
-                for (int day=0; day<5; day++) {
-                    for (int i=1; i<schedule.size(); i++) {
-                        SCUCourse course = new SCUCourse(Integer.parseInt(schedule.get(i)),currentQuarter);
-                        displayStr += getViewFrom(course, hr, min, days[day]);
-                    }
-                }
-                displayMe.add(displayStr);
-            }
-        }
-        for (int hr=1; hr<=8; hr++) {
-            for (int min=0; min<60; min+=20) {
-                String displayStr = "\t";
-                if (min == 0)
-                    displayStr = hr+"pm\t";
-                for (int day=0; day<5; day++) {
-                    boolean hasClassForDay = false;
-                    for (int i=1; i<schedule.size(); i++) {
-                        SCUCourse course = new SCUCourse(Integer.parseInt(schedule.get(i)),currentQuarter);
-                        String newStr = getViewFrom(course, hr, min, days[day]);
-                        displayStr += newStr;
-                        if (!newStr.equals("")) {
-                            hasClassForDay = true;
-                            break;
-                        }
-                    }
-                    if (!hasClassForDay)
-                        displayStr += "                       ";
-                }
-                displayMe.add(displayStr);
-            }
-        }*/
-        display();
+        display.display();
     }
 
-    private static String getViewFrom(SCUCourse course, int hr, int min, String day) {
-        if (course.getDays().contains(day)) {
-            int startH = Integer.parseInt(course.getTimes().substring(0,2));
-            int startM = Integer.parseInt(course.getTimes().substring(3,5));
-            int endH = Integer.parseInt(course.getTimes().substring(6,8));
-            int endM = Integer.parseInt(course.getTimes().substring(9,11));
-            if (hr <= endH && hr >= startH && min < endM+20 && min >= startM-20) {
-                //stage 1
-                if (hr == startH && startM-min<20 && startM>=min) {
-                    return " --------------------- ";
-                }
-                //stage 2, 20 minutes after stage 1
-                else if ((min==0 && hr-1==startH && startM-40<20 && startM>=40)
-                        || (min!=0 && hr==startH && startM-(min-20)<20 && startM>=min-20)) {
-                    String returnMe = " | "+course.getCourseID()+" - "+course.getCourse();
-                    for (int i=0; i<10-course.getCourse().length(); i++)
-                        returnMe += " ";
-                    returnMe += "| ";
-                    return returnMe;
-                }
-                /*//stage 3, 40 minutes after stage 1
-                else if () {
-                    course.updateSeats();
-
-                }
-                //stage 5, end of class
-                else if () {
-
-                }*/
-                //stage 4, blank pretty much, still more space to fill
-                else {
-                    return " |                   | ";
-                }
-            }
-        }
-        return "";
-    }
-
-    private static boolean conflicts(String id1, String id2) {
-        SCUCourse course1 = new SCUCourse(Integer.parseInt(id1), currentQuarter);
-        SCUCourse course2 = new SCUCourse(Integer.parseInt(id2), currentQuarter);
-        int startTime1H = Integer.parseInt(course1.getTimes().substring(0,2));
-        int startTime1M = Integer.parseInt(course1.getTimes().substring(3,5));
-        int startTime2H = Integer.parseInt(course2.getTimes().substring(0,2));
-        int startTime2M = Integer.parseInt(course1.getTimes().substring(3,5));
-        int endTime1H = Integer.parseInt(course1.getTimes().substring(6,8));
-        int endTime1M = Integer.parseInt(course1.getTimes().substring(9,11));
-        int endTime2H = Integer.parseInt(course2.getTimes().substring(6,8));
-        int endTime2M = Integer.parseInt(course2.getTimes().substring(9,11));
-        if (startTime1H<8) startTime1H += 12;
-        if (startTime2H<8) startTime2H += 12;
-        if (endTime1H<=8) endTime1H += 12;
-        if (endTime2H<=8) endTime2H += 12;
-        //check for 2nd end time in first class
-        if (endTime2H<=endTime1H && endTime2H>=startTime1H) {
-            if ((endTime2H==endTime1H && endTime2M>endTime1M) || (endTime2H==startTime1H && endTime2M>startTime1M))
-                return false;
-            return true;
-        }
-        //check for 2nd start time in first class
-        if (startTime2H<=endTime1H && startTime2H>=startTime1H) {
-            if ((startTime2H==endTime1H && startTime2M>endTime1M) || (startTime2H==startTime1H && startTime2M<startTime1M))
-                return false;
-            return true;
-        }
-        return false;
-    }
-
-    private static void findMinor(String dept) {
-        int overflow = 0;
+    private void findMinor(String dept) {
         try {
-            File minorFile = new File("docs/degreeReqs/"+dept+"minor.txt");
+            File minorFile = new File("text/degreeReqs/"+dept+"minor.txt");
             if (minorFile.exists()) {
                 BufferedReader br = new BufferedReader(new FileReader(minorFile.getAbsoluteFile()));
-                int i = 0;
-                for (String line = br.readLine(); line != null; line = br.readLine()){
-                    if (line.length()>WINDOW_COLS)
-                        overflow+=line.length()/WINDOW_COLS;
-                    displayMe.add(line);
-                }
+                for (String line = br.readLine(); line != null; line = br.readLine())
+                    display.addLine(line);
                 br.close();
             }
             else {
-                displayMe.add("Unfortunately no minor was found for the department you gave.");
+                display.addLine("Unfortunately no minor was found for the department you gave.");
             }
         } catch (IOException exception) {
             exception.printStackTrace();
         }
-        display(overflow);
+        display.display();
     }
 
-    private static void findMajor(String dept) {
-        int overflow = 0;
+    private void findMajor(String dept) {
         try {
-            File minorFile = new File("docs/degreeReqs/"+dept+"major.txt");
+            File minorFile = new File("text/degreeReqs/"+dept+"major.txt");
             if (minorFile.exists()) {
                 BufferedReader br = new BufferedReader(new FileReader(minorFile.getAbsoluteFile()));
-                int i = 0;
-                for (String line = br.readLine(); line != null; line = br.readLine()){
-                    if (line.length()>WINDOW_COLS)
-                        overflow+=line.length()/WINDOW_COLS;
-                    displayMe.add(line);
-                }
+                for (String line = br.readLine(); line != null; line = br.readLine())
+                    display.addLine(line);
                 br.close();
             }
             else {
-                displayMe.add("Unfortunately no minor was found for the department you gave.");
+                display.addLine("Unfortunately no minor was found for the department you gave.");
             }
         } catch (IOException exception) {
             exception.printStackTrace();
         }
-        display(overflow);
+        display.display();
     }
 
-    private static void displayClassList(ArrayList<String[]> allCoursesEver, String displayType) {
+    private void displayClassList(ArrayList<String[]> allCoursesEver, String displayType) {
+        ArrayList<String> courses = new ArrayList<>();
         for (String[] info : allCoursesEver) {
-            displayMe.add(formatLine((new SCUCourse(info)).getInfo(),0));
+            courses.add(formatLine((new SCUCourse(info)).getInfo(),0));
         }
-        Collections.sort(displayMe);
-        displayMe.add(0,formatLine(descriptions[0],0));
+        Collections.sort(courses);
+        display.addLine(formatLine(descriptions[0],0));
         String dashes = "";
         for (int i=0; i<27; i++)
             dashes += "-----";
-        displayMe.add(1,dashes);
-        display();
+        display.addLine(dashes);
+        for (String course : courses)
+            display.addLine(course);
+        display.display();
     }
 
-    private static ArrayList<String[]> findByX(String x, ArrayList<String[]> allCoursesEver, String arg) {
+    private ArrayList<String[]> findByX(String x, ArrayList<String[]> allCoursesEver, String arg) {
         ArrayList<String[]> returnMe = new ArrayList<String[]>();
         //System.out.println(x+" "+arg+(x.equals("ID")));
         for (String[] info : allCoursesEver) {
@@ -772,14 +613,14 @@ public class SCUCourseTools {
                 }
             }
             else {
-                displayMe.add("Something went wrong :(");
-                display();
+                display.addLine("Something went wrong :(");
+                display.display();
             }
         }
         return returnMe;
     }
 
-    private static int getTermID(int courseID) {
+    private int getTermID(int courseID) {
         for (int i=0; i<quarterIDs.length; i++) {
             if (quarterIDs[i][2]-courseID <= quarterIDs[i][2]-quarterIDs[i][1] && quarterIDs[i][2]-courseID >= 0)
                 return quarterIDs[i][0];
@@ -787,7 +628,7 @@ public class SCUCourseTools {
         return currentQuarter;
     }
 
-    private static int getFirstCourse(int courseID) {
+    private int getFirstCourse(int courseID) {
         int termID = getTermID(courseID);
         for (int i=0; i<quarterIDs.length; i++) {
             if (quarterIDs[i][0] == termID)
@@ -796,73 +637,52 @@ public class SCUCourseTools {
         return currentFirstCourse;
     }
 
-    private static void displayDetails(int courseID) {
+    private void displayDetails(int courseID) {
         SCUCourse currentCourse = (new SCUCourse(allCoursesAndTerms.get(""+getTermID(courseID))[courseID-getFirstCourse(courseID)]));
-        displayMe.add(formatLine(currentCourse.getInfo(),0));
+        display.addLine(formatLine(currentCourse.getInfo(),0));
         String[] allCourseInfo = currentCourse.getAllInfo();
         String[] fieldDescriptions = {"Course ID\t","Term ID\t\t","Subject\t\t","Course\t\t","Title\t\t","Description\t","Core Requirements",
-                                      "Pathway Requirements","My Core Requirements","Enrollment Info\t","Max Units\t","Min Units\t",
-                                      "Instructor Last Name","Instructor First Name","Days\t\t","Time\t\t","Location\t","SeatsRemaining\t",
-                                      "Term\t\t","Student Level\t","School\t\t"};
+                "Pathway Requirements","My Core Requirements","Enrollment Info\t","Max Units\t","Min Units\t",
+                "Instructor Last Name","Instructor First Name","Days\t\t","Time\t\t","Location\t","SeatsRemaining\t",
+                "Term\t\t","Student Level\t","School\t\t"};
         for (int i=0; i<allCourseInfo.length; i++) {
-            if (fieldDescriptions[i].equals("Description")) {
-                ArrayList<String> description = new ArrayList<String>();
-                int j=0;
-                displayMe.add(" "+allCourseInfo[i].length()/WINDOW_COLS);
-                String curr = "";
-                String leftover = "";
-                for (j=0; j<allCourseInfo[i].length()/WINDOW_COLS; j++) {
-                    curr = allCourseInfo[i].substring(j*WINDOW_COLS, (j+1)*(WINDOW_COLS));
-                    displayMe.add(leftover+curr);
-                    displayMe.add("\n"+allCourseInfo[i].substring(j*WINDOW_COLS, (j+1)*(WINDOW_COLS)));
-                }
+            if (fieldDescriptions[i].equals("Description\t")) {
+                display.addLine(fieldDescriptions[i]+"\t|\t\t"+allCourseInfo[i].substring(0,display.getWidth()-40));
+                display.addLine(allCourseInfo[i].substring(display.getWidth()-40));
             }
             else
-                displayMe.add(fieldDescriptions[i]+"\t|\t\t"+allCourseInfo[i]);
+                display.addLine(fieldDescriptions[i]+"\t|\t\t"+allCourseInfo[i]);
         }
-        display((allCourseInfo[5].length()+"Description              |                ".length())/WINDOW_COLS);
+        display.display();
     }
 
-    private static void displayDescription(int courseID) {
-        for (String[][] termArr : (new ArrayList<String[][]>(allCoursesAndTerms.values()))) {
-            for (String[] courseArr : termArr) {
-                if (courseArr != null) {
-                    SCUCourse course = new SCUCourse(courseArr);
-                    if (course.getCourseID() == courseID)
-                        displayMe.add(course.getDescription());
-                }
-            }
-        }
-        display();
-    }
-
-    private static void findDoubleCore() {
+    private void findDoubleCore() {
         int termID = currentQuarter;
         int firstCourse = currentFirstCourse;
         int lastCourse = currentFirstCourse+3000;
-        displayMe.add(formatLine(descriptions[0],0));
+        display.addLine(formatLine(descriptions[0],0));
         String dashes = "";
         for (int i=0; i<27; i++)
             dashes += "-----";
-        displayMe.add(dashes);
+        display.addLine(dashes);
         for (int i=firstCourse; i<lastCourse; i++) {
             if (allCoursesAndTerms.get(""+termID)[i-firstCourse] != null && allCoursesAndTerms.get(""+termID)[i-firstCourse][6].contains(",")) {
-                displayMe.add(formatLine((new SCUCourse(allCoursesAndTerms.get(""+termID)[i-firstCourse])).getInfo(),0));
+                display.addLine(formatLine((new SCUCourse(allCoursesAndTerms.get(""+termID)[i-firstCourse])).getInfo(),0));
             }
         }
-        display();
+        display.display();
     }
 
-    private static void findMyDoubleCore() {
+    private void findMyDoubleCore() {
         //Try again:
         ArrayList<String> lines = new ArrayList<String>();
         String[] coreNames1 = {"Ethics","Diversity","Social Science","RTC 2","C&I 3","RTC 3","ELSJ"};
         String[] coreNames = {"Ethics","RTC 3","ELSJ"};
-        displayMe.add(formatLine(descriptions[0],0));
+        display.addLine(formatLine(descriptions[0],0));
         String dashes = "";
         for (int i=0; i<27; i++)
             dashes += "-----";
-        displayMe.add(dashes);
+        display.addLine(dashes);
         SCUCourse course;
         int coreCount;
         for (int j=0; j<quarterIDs.length; j++) {
@@ -889,14 +709,14 @@ public class SCUCourseTools {
         //Sort the lines
         Collections.sort(lines);
         for (String str : lines) {
-            displayMe.add(str);
+            display.addLine(str);
         }
-        display();
+        display.display();
     }
 
-    private static void loadSW(int termID) {
+    private void loadSW(int termID) {
         try {
-            File swCourseFile = new File("docs/swcourses" + termID + ".txt");
+            File swCourseFile = new File("text/swcourses" + termID + ".txt");
             if (swCourseFile.exists()) {
                 BufferedReader br = new BufferedReader(new FileReader(swCourseFile.getAbsoluteFile()));
                 int i = 0;
@@ -915,7 +735,7 @@ public class SCUCourseTools {
         }
     }
 
-    private static void updateFile(int termID) {
+    private void updateFile(int termID) {
         ArrayList<String> seatsRemaining = new ArrayList<String>();
         ArrayList<String> courseIDs = new ArrayList<String>();
         for (String[] arr : seatWatchCourses) {
@@ -923,7 +743,7 @@ public class SCUCourseTools {
             courseIDs.add(arr[0].substring(1,6));
         }
         try {
-            File swCourseFile = new File("docs/swcourses" + termID + ".txt");
+            File swCourseFile = new File("text/swcourses" + termID + ".txt");
             String writeMe = "";
             if (!swCourseFile.exists()) {
                 swCourseFile.createNewFile();
@@ -942,10 +762,10 @@ public class SCUCourseTools {
         }
     }
 
-    private static void getTentative(int termID) {
+    private void getTentative(int termID) {
         try {
-            File tentFile = new File("docs/tentative" + termID + ".txt");
-            File swCourseFile = new File("docs/courseInfo" + termID + ".txt");
+            File tentFile = new File("text/tentative" + termID + ".txt");
+            File swCourseFile = new File("text/courseInfo" + termID + ".txt");
             if (!swCourseFile.exists()) {
                 swCourseFile.createNewFile();
             }
@@ -1036,9 +856,9 @@ public class SCUCourseTools {
         }
     }
 
-    public static String seatWatcher() {
+    public String seatWatcher() {
         String returnMe = "";
-        loading(3);
+        display.loading(3);
         //Insertion sort
         for (int i=0; i<seatWatchCourses.size(); i++) {
             String[] temp = seatWatchCourses.get(i);
@@ -1048,26 +868,26 @@ public class SCUCourseTools {
             seatWatchCourses.set(j+1,temp);
         }
         boolean isRunning = true;
-        displayMe.add(formatLine(descriptions[1],1));
+        display.addLine(formatLine(descriptions[1],1));
         String dashes = "";
         for (int i=0; i<27; i++)
             dashes += "-----";
-        displayMe.add(dashes);
+        display.addLine(dashes);
         for (String[] str : seatWatchCourses) {
             SCUCourse course = new SCUCourse(str);
             str[str.length-4] = ""+course.updateSeats();
             String addMe = formatLine(course.getSWInfo(),1);
-            displayMe.add(addMe);
+            display.addLine(addMe);
             returnMe += addMe;
         }
         //updateFile(currentQuarter);
-        display();
+        display.display();
         return returnMe;
     }
 
-    public static String showMyCourses() {
+    public String showMyCourses() {
         String returnMe = "";
-        loading(3);
+        display.loading(3);
         //Insertion sort
         for (int i=0; i<seatWatchCourses.size(); i++) {
             String[] temp = seatWatchCourses.get(i);
@@ -1077,24 +897,24 @@ public class SCUCourseTools {
             seatWatchCourses.set(j+1,temp);
         }
         boolean isRunning = true;
-        displayMe.add(formatLine(descriptions[1],1));
+        display.addLine(formatLine(descriptions[1],1));
         String dashes = "";
         for (int i=0; i<27; i++)
             dashes += "-----";
-        displayMe.add(dashes);
+        display.addLine(dashes);
         for (String[] str : seatWatchCourses) {
             SCUCourse course = new SCUCourse(str);
             str[str.length-4] = ""+course.getSeatsRemaining();
             String addMe = formatLine(course.getSWInfo(),1);
-            displayMe.add(addMe);
+            display.addLine(addMe);
             returnMe += addMe;
         }
         //updateFile(currentQuarter);
-        display();
+        display.display();
         return returnMe;
     }
 
-    private static void removeFromSeatWatch(int courseID, int termID, int firstCourse) {
+    private void removeFromSeatWatch(int courseID, int termID, int firstCourse) {
         for (int i=0; i<seatWatchCourses.size(); i++) {
             if (seatWatchCourses.get(i)[0].substring(1,6).equals(""+courseID)) {
                 seatWatchCourses.remove(i);
@@ -1102,7 +922,7 @@ public class SCUCourseTools {
         }
     }
 
-    private static void addToSeatWatch(int courseID , int termID, int firstCourse, String seats) {
+    private void addToSeatWatch(int courseID , int termID, int firstCourse, String seats) {
         boolean doesExist = false;
         for (int i=0; i<seatWatchCourses.size(); i++) {
             //System.out.println(""+courseID+" "+seatWatchCourses.get(i)[0].substring(1,6));
@@ -1110,7 +930,7 @@ public class SCUCourseTools {
                 doesExist = true;
             }
         }
-        //loading(3);
+        //display.loading(3);
         if (!doesExist) {
             if (seats != "~~~")
                 allCoursesAndTerms.get(""+termID)[courseID-firstCourse][17] = seats;
@@ -1121,16 +941,16 @@ public class SCUCourseTools {
         }
     }
 
-    private static void addToSeatWatch(int courseID , int termID, int firstCourse) {
+    private void addToSeatWatch(int courseID , int termID, int firstCourse) {
         addToSeatWatch(courseID, termID, firstCourse, "~~~");
     }
 
     /* * * * * * * * * * * * * * * * FILE IO FUNCTIONS * * * * * * * * * * * * * * * */
 
-    private static void scrapeToFile(int termID, int firstCourse) {
+    private void scrapeToFile(int termID, int firstCourse) {
         int lastCourse = firstCourse+3000;
         try {
-            File courseInfo = new File("docs/courseInfo" + termID + ".txt");
+            File courseInfo = new File("text/courseInfo" + termID + ".txt");
             if (!courseInfo.exists()) {
                 courseInfo.createNewFile();
             }
@@ -1143,16 +963,16 @@ public class SCUCourseTools {
         }
     }
 
-    private static String configData(int termID, int firstCourse, int lastCourse) {
+    private String configData(int termID, int firstCourse, int lastCourse) {
         ArrayList<String> displayMes = new ArrayList<String>();
         String returnMe = "";
         for (int i=firstCourse; i<lastCourse+1; i++) { //27510
             if (i%100 == 0) {
                 displayMes.add("Done through: " + i);
                 for (String displayer : displayMes) {
-                    displayMe.add(displayer);
+                    display.addLine(displayer);
                 }
-                display();
+                display.display();
             }
             SCUCourse course = new SCUCourse(i,termID);
             if (course.getCoreReqs().size()>=0 && course.doesExist()) {
@@ -1169,10 +989,10 @@ public class SCUCourseTools {
         return returnMe;
     }
 
-    private static void loadData(int termID, int firstCourse) {
+    private void loadData(int termID, int firstCourse) {
         int lastCourse = firstCourse+3000;
         try {
-            File courseInfo = new File("docs/courseInfo" + termID + ".txt");
+            File courseInfo = new File("text/courseInfo" + termID + ".txt");
             if (courseInfo.exists()) {
                 BufferedReader br = new BufferedReader(new FileReader(courseInfo.getAbsoluteFile()));
                 int i = 0;
@@ -1188,130 +1008,14 @@ public class SCUCourseTools {
                 br.close();
             }
             else {
-                displayMe.add("No data for term "+termID+" found.");
+                display.addLine("No data for term "+termID+" found.");
             }
         } catch (IOException exception) {
             exception.printStackTrace();
         }
     }
 
-    private static void meTask() {
-        //load file about user
-        //display options
-        //get argc and argv like in run()
-        displayMe.add("Testing this stuff");
-        display();
-        boolean isRunning = true;
-        while (isRunning) {
-            try {
-                input = c.readLine();//scan.nextLine();
-                String[] allLines = input.split(" ");
-                String argc = allLines[0];
-                String[] argv = {};
-                if (allLines.length>1) {
-                    argv = new String[allLines.length-1];
-                    for (int i=1; i<allLines.length; i++) {
-                        argv[i-1] = allLines[i];
-                    }
-                }
-                isRunning = doMeTask(argc,argv);
-            } catch (ArrayIndexOutOfBoundsException e) {
-                displayMe.add("Invalid command");
-                display();
-            }
-        }
-        help();
-    }
-
-    private static boolean doMeTask(String argc, String[] argv) {
-        
-        return false;
-    }
-
-    /* * * * * * * * * * * * * * * * INTERFACE FUNCTIONS * * * * * * * * * * * * * * * */
-
-    private static void display() {
-        clearEverything();
-        c.writer().print(ESC + "[1;1H");
-        c.flush();
-        String[] displayAlts = {"\u001B[0;38m", "\u001B[0;37m"};
-        String dashes = "";
-        /*for (int i=0; i<27; i++)
-            dashes += "-----";
-        System.out.println(dashes);*/
-        for (int i = 0; i < WINDOW_SPACES-1; i++) {
-            if (i<displayMe.size()) {
-                c.writer().print(ESC + "["+(i+1)+";1H");
-                c.flush();
-                c.writer().println(displayAlts[i%2]+displayMe.get(i));
-                c.flush();
-                //System.out.println(displayAlts[i%2]+displayMe.get(i));
-            }
-            else {
-                c.writer().print(ESC + "["+(i+1)+";1H");
-                c.flush();
-                c.writer().println();
-                c.flush();
-                //System.out.println();
-            }
-        }
-        c.writer().print(ESC + "["+(WINDOW_SPACES)+";1H");
-        c.flush();
-        c.writer().print("> ");
-        c.flush();
-        //System.out.print("> ");
-        displayMe = new ArrayList<String>();
-    }
-
-    private static void display(int overflow) {
-        clearEverything();
-        c.writer().print(ESC + "[1;1H");
-        c.flush();
-        String[] displayAlts = {"\u001B[0;38m", "\u001B[0;37m"};
-        /*String dashes = "";
-        for (int i=0; i<27; i++)
-            dashes += "-----";
-        System.out.println(dashes);*/
-        int actualO = 0;
-        for (int i = 0; i < WINDOW_SPACES-overflow-1; i++) {
-            if ((i+actualO)<displayMe.size()) {
-                c.writer().print(ESC + "["+(i+1+actualO)+";1H");
-                c.flush();
-                c.writer().println(displayAlts[i%2]+displayMe.get(i));
-                c.flush();
-                if ((displayAlts[i%2]+displayMe.get(i)).length()>WINDOW_COLS)
-                    actualO += (displayAlts[i%2]+displayMe.get(i)).length()/WINDOW_COLS;
-                //System.out.println(displayAlts[i%2]+displayMe.get(i));
-            }
-            else {
-                c.writer().print(ESC + "["+(i+1+actualO)+";1H");
-                c.flush();
-                c.writer().println();
-                c.flush();
-                //System.out.println();
-            }
-        }
-        c.writer().print(ESC + "["+(WINDOW_SPACES)+";1H");
-        c.flush();
-        c.writer().print("> ");
-        c.flush();
-        //System.out.print("> ");
-        displayMe = new ArrayList<String>();
-    }
-
-    public static void clearEverything() {
-        String printMe = "";
-        for (int i=0; i<=WINDOW_COLS; i++) {
-            printMe += " ";
-        }
-        for (int i=0; i<WINDOW_SPACES; i++) {
-            c.writer().print(ESC+"["+(i+1)+";1H");
-            c.writer().println(printMe);
-            c.flush();
-        }
-    }
-
-    public static String formatLine(String[] info, int format) {
+    public String formatLine(String[] info, int format) {
         String returnMe = " ";
         for (int i=0; i<info.length-1; i++) {
             if (info[i] == null || info[i].equals("null"))
@@ -1325,15 +1029,5 @@ public class SCUCourseTools {
             info[info.length-1] = "---";
         returnMe += info[info.length-1];
         return returnMe;
-    }
-
-    private static void loading(int dots) {
-        String addMe = "Loading";
-        while (dots>0) {
-            addMe += ".";
-            dots--;
-        }
-        displayMe.add(addMe);
-        display();
     }
 }

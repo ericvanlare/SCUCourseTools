@@ -1,0 +1,51 @@
+The Bachelor of Science in Computer Science and Engineering features a balanced core program in which each student studies the engineering aspects of software and hardware as well as the mathematical foundations of computation. The computer engineering electives permit students to build on this core with varying emphasis, depending on their interests.
+Students must also complete the University Core Curriculum requirements for a Bachelor of Science degree in the engineering school and sufficient electives for a total of 191 units.
+
+Computer Science and Engineering
+	ENGR 1 — Introduction to Engineering
+	COEN 10 — Introduction to Programming
+	COEN 11 — Advanced Programming
+	COEN 12 — Abstract Data Types and Data Structures
+	COEN 19 — Discrete Mathematics
+	COEN 20 — Embedded Systems
+	COEN 21 — Logic Design
+	COEN 70 — Formal Specification and Advanced Data Structures
+	COEN 122 — Computer Architecture
+	COEN 146 — Computer Networks
+	COEN 171 — Design and Implementation of Programming Languages
+	COEN 174 — Software Engineering
+	COEN 175 — Formal Language Theory and Compiler Construction
+	COEN 177 — Operating Systems
+	COEN 179 — Theory of Algorithms
+	COEN 194, 195, 196 — Design Project I, II, III
+	Three upper-division electives (12 units minimum) selected from COEN 100–180, ELEN 115, 133, and 134
+
+Electrical Engineering
+	ELEN 50 — Electric Circuits I
+	ELEN 153 — Digital Integrated Circuit Design
+
+Humanities
+	ENGL 181, 182A, and 182B — Applied Engineering Communications
+
+Mathematics and Natural Sciences
+	MATH 11, 12, 13, 14 — Calculus and Analytic Geometry I, II, III, IV
+	PHYS 31, 32, 33 — Physics for Scientists and Engineers I, II, III
+	CHEM 11 — General Chemistry I
+	AMTH 106 (or MATH 22) — Differential Equations
+	AMTH 108 (or MATH 122) — Probability and Statistics
+	One of the following:
+		MATH 53 — Linear Algebra
+		MATH 166 — Numerical Analysis
+		AMTH 118 — Numerical Methods
+
+Effective Fall 2010: approved substitutions for CHEM 11 are BIOL 18, CHEM 1, ENVS 21, and PHYS 34; approved substitutions for AMTH 106 are CHEM 12, BIOL 21, MATH 101-178, and any CHEM 11 substitution (if not already used for CHEM 11).  All substitutions require the completion of a petition to substitute or waive.  This list is subject to change without notice.
+
+Educational Enrichment Requirement
+An educational enrichment experience selected from one of the following options:
+	Eight or more units in a study abroad program (cannot duplicate other coursework)
+	Six-month co-op experience in industry (COEN 188 and COEN 189)
+	Six or more units of undergraduate research (cannot also be used as an elective)
+	Twelve or more units selected in consultation with an advisor (cannot be used to satisfy University core requirements, but a minor or second major may be used)
+	Admission to one of the department’s master’s degree programs and completion of twelve or more units of graduate coursework
+	
+	
