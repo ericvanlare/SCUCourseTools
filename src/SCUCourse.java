@@ -5,66 +5,72 @@ import java.util.ArrayList;
 import java.lang.Integer;
 
 /**
- *
+ * A full description of a course at Santa Clara University, with information
+ * scraped from their CourseAvail website.
  *
  * @author Eric Van Lare
  */
 public class SCUCourse implements Comparable<SCUCourse> {
-    //String colors for fancy output
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_BLACK = "\u001B[30m";
-    public static final String ANSI_RED = "\u001B[31m";
-    public static final String ANSI_GREEN = "\u001B[32m";
-    public static final String ANSI_YELLOW = "\u001B[33m";
-    public static final String ANSI_BLUE = "\u001B[34m";
-    public static final String ANSI_PURPLE = "\u001B[35m";
-    public static final String ANSI_CYAN = "\u001B[36m";
-    public static final String ANSI_WHITE = "\u001B[37m";
 
+    // Field definition for SCUCourse object
     private URL url;
-    private static int courseID;
-    private static int termID;
-    private static String subject;
-    private static String course;
-    private static String title;
-    private static String description;
-    private static ArrayList<String> coreReqs;
-    private static ArrayList<String> pathwayReqs;
-    private static ArrayList<String> myCoreReqs;
-    private static String enrollmentInfo;
-    private static int maxUnits;
-    private static int minUnits;
-    private static String instructorL;
-    private static String instructorF;
-    private static String days;
-    private static String times;
-    private static String location;
-    private static int seatsRemaining;
-    private static String term;
-    private static String studentLevel;
-    private static String school;
-    private static boolean doesExist;
-    private static String downFrom;
+    private int courseID;
+    private int termID;
+    private String subject;
+    private String course;
+    private String title;
+    private String description;
+    private ArrayList<String> coreReqs;
+    private ArrayList<String> pathwayReqs;
+    private ArrayList<String> myCoreReqs;
+    private String enrollmentInfo;
+    private int maxUnits;
+    private int minUnits;
+    private String instructorL;
+    private String instructorF;
+    private String days;
+    private String times;
+    private String location;
+    private int seatsRemaining;
+    private String term;
+    private String studentLevel;
+    private String school;
+    private boolean doesExist;
+    private String downFrom;
 
-    static private String[] foundations = {"F_CTW1","F_CTW2","F_CI1","F_CI2","F_SLA1","F_SLA2","F_MATH","F_RTC1"};
-    static private String[] foundationsNames = {"CTW 1","CTW 2","C&I 1","C&I 2","Second Language 1","Second Language 2","Math","RTC 1"};
-    static private String[] explorations = {"E_ETH","E_CE","E_DV","E_ARTS","E_SOSC","E_NTSC","E_RTC2","E_CI3","E_STS","E_RTC3"};
-    static private String[] explorationsNames = {"Ethics","Civil Engagement","Diversity","Arts","Social Science","Natural Science","RTC 2","C&I 3",
-            "Science Technology Society","RTC 3","ELSJ"};
-    static private String[] integrations = {"I_AW","I_EL"};
-    static private String[] integrationsNames = {"Advanced Writing","ELSJ"};
-    static private String[] pathways = {"I_PTHAE","I_PTHAMS","I_PTHB","I_PTHCHD","I_PTHCINST","I_PTHDEM","I_PTHDA","I_PTHDT","I_PTHFHP","I_PTHGSB",
-            "I_PTHGH","I_PTHHR","I_PTHIS","I_PTHJA","I_PTHLSJ","I_PTHLPOSC","I_PTHPR","I_PTHPP","I_PTHPS","I_PTHRPSI",
-            "I_PTHS","I_PTHVST","I_PTHV"};
-    static private String[] pathwaysNames = {"Applied Ethics","American Studies","Beauty","Childhood, Family & Society","Cinema Studies","Democracy",
-            "The Digital Age","Design Thinking","Food, Hunger, Poverty Environment","Gender, Sexuality & the Body",
-            "Global Health","Human Rights","Islamic Studies","Justice & the Arts","Law & Social Justice",
-            "Leading People, Organizations & Social Change","Politics & Religion","Public Policy","Paradigm Shifts",
-            "Race Place & Social Inequities","Sustainability","Values in Science & Technology","Vocation"};
-    static private String[] myCores = {"E_ETH","E_DV","E_RTC2","E_RTC3","I_EL"};
-    static private String[] coreNames = {"Ethics","Diversity","RTC 2","RTC 3","ELSJ"};
+    // Arrays of identifiers and their names, used arrays instead of hashtable for compactability
+    private String[] foundations        = {"F_CTW1","F_CTW2","F_CI1","F_CI2","F_SLA1","F_SLA2","F_MATH","F_RTC1"};
+    private String[] foundationsNames   = {"CTW 1","CTW 2","C&I 1","C&I 2","Second Language 1","Second Language 2",
+                                            "Math","RTC 1"};
+    private String[] explorations       = {"E_ETH","E_CE","E_DV","E_ARTS","E_SOSC","E_NTSC","E_RTC2","E_CI3","E_STS",
+                                            "E_RTC3"};
+    private String[] explorationsNames  = {"Ethics","Civil Engagement","Diversity","Arts","Social Science",
+                                            "Natural Science","RTC 2","C&I 3","Science Technology Society","RTC 3",
+                                            "ELSJ"};
+    private String[] integrations       = {"I_AW","I_EL"};
+    private String[] integrationsNames  = {"Advanced Writing","ELSJ"};
+    private String[] pathways           = {"I_PTHAE","I_PTHAMS","I_PTHB","I_PTHCHD","I_PTHCINST","I_PTHDEM","I_PTHDA",
+                                            "I_PTHDT","I_PTHFHP","I_PTHGSB","I_PTHGH","I_PTHHR","I_PTHIS","I_PTHJA",
+                                            "I_PTHLSJ","I_PTHLPOSC","I_PTHPR","I_PTHPP","I_PTHPS","I_PTHRPSI","I_PTHS",
+                                            "I_PTHVST","I_PTHV"};
+    private String[] pathwaysNames      = {"Applied Ethics","American Studies","Beauty","Childhood, Family & Society",
+                                            "Cinema Studies","Democracy","The Digital Age","Design Thinking",
+                                            "Food, Hunger, Poverty Environment","Gender, Sexuality & the Body",
+                                            "Global Health","Human Rights","Islamic Studies","Justice & the Arts",
+                                            "Law & Social Justice","Leading People, Organizations & Social Change",
+                                            "Politics & Religion","Public Policy","Paradigm Shifts",
+                                            "Race Place & Social Inequities","Sustainability",
+                                            "Values in Science & Technology","Vocation"};
+    private String[] myCores            = {"E_ETH","E_DV","E_RTC2","E_RTC3","I_EL"};
+    private String[] coreNames          = {"Ethics","Diversity","RTC 2","RTC 3","ELSJ"};
 
-
+    /**
+     * Construct an SCUCourse object from the course and term IDs, using
+     * CourseAvail to find the rest of the info on the course.
+     *
+     * @param courseID
+     * @param termID
+     */
     public SCUCourse(int courseID, int termID) {
         this.courseID = courseID;
         this.termID = termID;
@@ -72,16 +78,20 @@ public class SCUCourse implements Comparable<SCUCourse> {
         myCoreReqs = new ArrayList<String>();
         pathwayReqs = new ArrayList<String>();
         update();
-        //String[] stuff = scrapeCourseInfo(courseID);
-        //coreReqs = getCoreReqs(courseID);
     }
 
+    /**
+     * Construct an SCUCourse object from an array containing all the
+     * information about the class. Doesn't update any info from courseavail
+     * in the constructor itself.
+     *
+     * @param info
+     */
     public SCUCourse(String[] info) {
-        String[] returnMe = {""+courseID,""+termID,subject,course,title,description,""+coreReqs,""+pathwayReqs,""+myCoreReqs,enrollmentInfo,
-                ""+maxUnits,""+minUnits,instructorL,instructorF,days,times,location,""+seatsRemaining,term,studentLevel,school};
+        String[] returnMe = {""+courseID,""+termID,subject,course,title,description,""+coreReqs,""+pathwayReqs,
+                             ""+myCoreReqs,enrollmentInfo,""+maxUnits,""+minUnits,instructorL,instructorF,days,times,
+                             location,""+seatsRemaining,term,studentLevel,school};
         courseID=Integer.parseInt(info[0].substring(1,6));
-        //for (String str : info)
-        //System.out.print(str + ", ");
         termID=Integer.parseInt(info[1]);
         subject=info[2];
         course=info[3];
@@ -92,15 +102,11 @@ public class SCUCourse implements Comparable<SCUCourse> {
         pathwayReqs = new ArrayList<String>();
 
         try {
-            //System.out.println(info[6]);
             String coreReqsString = info[6];
             String[] coreReqsArr = coreReqsString.substring(1,coreReqsString.length()-1).split(", ");
             for (String str : coreReqsArr) {
-                //System.out.println(str);
                 if (str.length()>0) {
-                    //System.out.println("Yes");
                     coreReqs.add(str);
-                    //System.out.println("Here: "+coreReqs.get(0));
                 }
             }
         } catch (NullPointerException e) {}
@@ -138,45 +144,96 @@ public class SCUCourse implements Comparable<SCUCourse> {
         downFrom="";
     }
 
+    /**
+     * Check how stressed I should be about whether or not I'll be able to get
+     * into a class based on how many seats are left. >=30 is green for in the
+     * clear, 30>x>=15 is yellow for starting to have to worry, 15>x>=1 is red
+     * for probably not going to get the class unless I'm lucky or register
+     * very soon, and 0 is blue for the class being filled.
+     *
+     * @param seats number of seats remaining in this class
+     * @return A String containing the number of seats remaining, appropriately
+     *         colored based on how screwed I am if I wanna take the class.
+     */
+    public String checkDangerZone(int seats) {
+        String ANSI_RESET = "\u001B[0m";
+        String ANSI_RED = "\u001B[31m";
+        String ANSI_GREEN = "\u001B[32m";
+        String ANSI_YELLOW = "\u001B[33m";
+        String ANSI_BLUE = "\u001B[34m";
+
+        String seatColor = "";
+        if (seats >= 30)
+            seatColor += ANSI_GREEN;
+        else if (seats >= 15)
+            seatColor += ANSI_YELLOW;
+        else if (seats >= 1)
+            seatColor += ANSI_RED;
+        else
+            seatColor += ANSI_BLUE;
+        return seatColor + seats + ANSI_RESET;
+    }
+
+    /**
+     * Compare this SCUCourse to another SCUCourse based on the course
+     * identifier (e.g. COEN 12).
+     *
+     * @param comparingCourse SCUCourse to be compared to this one
+     * @return 0 if equal, negative if argument is greater, positive if this is
+     *         greater.
+     */
+    @Override
+    public int compareTo(SCUCourse comparingCourse) {
+        return this.course.compareTo(comparingCourse.getCourse());
+    }
+
+    /**
+     * Determine if there is actually a course corresponding to the course and
+     * term IDs given when constructed.
+     *
+     * @return true if course exists
+     */
     public boolean doesExist() {
         return doesExist;
     }
 
+    /**
+     * Determine if this course satisfies any core requirements I still need to
+     * take.
+     */
+    private void myCoreFromCore() {
+        for (String schoolCore : coreReqs)
+            for (String myCoreName : coreNames)
+                if (myCoreName.equals(schoolCore))
+                    myCoreReqs.add(schoolCore);
+    }
+
+    /**
+     * Get a String representation of the course including the course ID,
+     * title, course number, instructor, date and time, and core requirements
+     * satisfied.
+     *
+     * @return A String representation of the course
+     */
+    @Override
+    public String toString() {
+        return course+" | "+title+" | "+courseID+" | "+instructorL+" | "+days+" | "+times+" | "+coreReqs;
+    }
+
+    /**
+     * Scrape all the information about the course from CourseAvail and save it
+     * in the fields defined in this class.
+     */
     public void update() {
-
-		/*int phase = 0;
-
-		//Look for seats, should be 103, can just check for "seats remaining"
-		//Add two to get quarter and school
-		//Look for "width=\"7" - phase 1
-		int subjectNum = 111;
-		//Look for "class=\"normal" - phase 2
-		int courseNum = 117;
-		//Look for "Title", add 2 - phase 3
-		int titleNum = 123;
-		//Look for "Description", add 2 - phase 4
-		int descriptionNum = 130;
-		//Core
-		//Enrollment
-		//Units
-		//Instructor - phase 8 (books+4)
-		//then days
-		//then times*/
-
-        String[] returnMe = new String[6];
         try {
-            int addMe;
-            URL url  = new URL("https://legacy.scu.edu/courseavail/class/?fuseaction=details&class_nbr="+courseID+"&term="+termID);
+            URL url  = new URL("https://legacy.scu.edu/courseavail/class/?fuseaction=details&class_nbr="+courseID+
+                    "&term="+termID);
             URLConnection uc = url.openConnection();
             BufferedReader in = new BufferedReader(new InputStreamReader(uc.getInputStream(), "UTF-8"));
             String inputLine;
             int lineCounter = 1;
-            //StringBuilder a = new StringBuilder();
             boolean isFound = false;
-            boolean isAdjusted = false;
             while ((inputLine = in.readLine()) != null && !isFound) {
-                //System.out.println(lineCounter+"\t"+inputLine);
-                //a.append(inputLine);
                 if (lineCounter == 103) {
                     if (inputLine.contains("text/javascript")) {
                         isFound = true;
@@ -184,7 +241,8 @@ public class SCUCourse implements Comparable<SCUCourse> {
                     }
                     else {
                         try {
-                            seatsRemaining = (new Integer(inputLine.substring(inputLine.indexOf("3>")+2,inputLine.indexOf("seat")-1))).intValue();
+                            seatsRemaining = Integer.parseInt(inputLine.substring(inputLine.indexOf("3>")+2,
+                                    inputLine.indexOf("seat")-1));
                         } catch (StringIndexOutOfBoundsException e) {
                             seatsRemaining = 0;
                         }
@@ -203,12 +261,12 @@ public class SCUCourse implements Comparable<SCUCourse> {
                 else if (lineCounter == 117) {
                     int starti = inputLine.indexOf("\">")+2;
                     int endi = inputLine.indexOf("</");
-                    returnMe[5] = inputLine.substring(starti,endi);
+                    course = inputLine.substring(starti,endi);
                 }
                 else if (lineCounter == 123) {
                     int starti = inputLine.indexOf(">")+1;
                     int endi = inputLine.indexOf("</");
-                    returnMe[0] = inputLine.substring(starti,endi);
+                    title = inputLine.substring(starti,endi);
                 }
                 else if (lineCounter == 130) {
                     description = inputLine.substring(inputLine.indexOf("v>")+2,inputLine.indexOf("</"));
@@ -249,8 +307,8 @@ public class SCUCourse implements Comparable<SCUCourse> {
                     inputLine = in.readLine();
                     inputLine = in.readLine();
                     lineCounter+=2;
-                    maxUnits = (new Integer(inputLine.substring(inputLine.indexOf("d>")+2,inputLine.indexOf("/")))).intValue();
-                    minUnits = (new Integer(inputLine.substring(inputLine.indexOf("/")+1,inputLine.indexOf("</")))).intValue();
+                    maxUnits = Integer.parseInt(inputLine.substring(inputLine.indexOf("d>")+2,inputLine.indexOf("/")));
+                    minUnits = Integer.parseInt(inputLine.substring(inputLine.indexOf("/")+1,inputLine.indexOf("</")));
                 }
                 else if (inputLine.contains("Books")) {
                     inputLine = in.readLine();
@@ -263,25 +321,24 @@ public class SCUCourse implements Comparable<SCUCourse> {
                     int endi = inputLine.indexOf(",");
                     if (endi == -1)
                         endi = inputLine.indexOf("</");
-                    returnMe[2] = inputLine.substring(starti,endi);
+                    instructorL = inputLine.substring(starti,endi);
                     if (endi != inputLine.indexOf("</"))
                         instructorF = inputLine.substring(endi,inputLine.indexOf("</"));
 
                     inputLine = in.readLine();
                     lineCounter++;
-                    returnMe[3] = inputLine.substring(inputLine.indexOf("<td>")+4,inputLine.indexOf("<br"));
+                    days = inputLine.substring(inputLine.indexOf("<td>")+4,inputLine.indexOf("<br"));
 
                     inputLine = in.readLine();
                     lineCounter++;
                     starti = inputLine.indexOf("<td>")+4;
                     endi = inputLine.indexOf("<br");
-                    returnMe[4] = inputLine.substring(starti,endi);
-                    returnMe[4] = returnMe[4].substring(0,5)+returnMe[4].substring(8,14);
+                    times = inputLine.substring(starti,endi);
+                    times = times.substring(0,5)+times.substring(8,14);
 
                     inputLine = in.readLine();
                     inputLine = in.readLine();
                     lineCounter+=2;
-                    //System.out.println(inputLine);
                     starti=inputLine.indexOf("d>")+2;
                     if (inputLine.contains("map"))
                         starti=inputLine.indexOf("\">")+2;
@@ -291,36 +348,33 @@ public class SCUCourse implements Comparable<SCUCourse> {
             }
             in.close();
         }
-        catch (NumberFormatException|StringIndexOutOfBoundsException|IOException e) {
-            //e.printStackTrace();
-        }
-        course = returnMe[5];
-        title = returnMe[0];
-        instructorL = returnMe[2];
-        days = returnMe[3];
-        times = returnMe[4];
+        catch (NumberFormatException|StringIndexOutOfBoundsException|IOException e) {}
         myCoreFromCore();
     }
 
+    /**
+     * Just update the seats remaining instead of scraping for all the
+     * information again.
+     *
+     * @return number of seats remaining
+     */
     public int updateSeats() {
         try {
             downFrom = "";
-            int addMe;
-            URL url  = new URL("https://legacy.scu.edu/courseavail/class/?fuseaction=details&class_nbr="+courseID+"&term="+termID);
+            URL url  = new URL("https://legacy.scu.edu/courseavail/class/?fuseaction=details&class_nbr="+courseID+
+                    "&term="+termID);
             URLConnection uc = url.openConnection();
             BufferedReader in = new BufferedReader(new InputStreamReader(uc.getInputStream(), "UTF-8"));
             String inputLine;
             int lineCounter = 1;
             int seatsRemainingOld = seatsRemaining;
-            //StringBuilder a = new StringBuilder();
             boolean isFound = false;
             while ((inputLine = in.readLine()) != null && !isFound) {
-                //System.out.println(lineCounter+"\t"+inputLine);
-                //a.append(inputLine);
                 if (lineCounter == 103) {
                     if (!inputLine.contains("text/javascript")) {
                         try {
-                            seatsRemaining = (new Integer(inputLine.substring(inputLine.indexOf("3>")+2,inputLine.indexOf("seat")-1))).intValue();
+                            seatsRemaining = Integer.parseInt(inputLine.substring(inputLine.indexOf("3>")+2,
+                                    inputLine.indexOf("seat")-1));
                             if (seatsRemaining<seatsRemainingOld)
                                 downFrom = " down from " + checkDangerZone(seatsRemainingOld);
                             else if (seatsRemaining>seatsRemainingOld)
@@ -339,137 +393,11 @@ public class SCUCourse implements Comparable<SCUCourse> {
             }
             in.close();
         }
-        catch (NumberFormatException|StringIndexOutOfBoundsException|IOException e) {
-            //e.printStackTrace();
-        }
+        catch (NumberFormatException|StringIndexOutOfBoundsException|IOException e) {}
         return seatsRemaining;
     }
 
-    public void myCoreFromCore() {
-        //System.out.println(coreReqs);
-        for (String schoolCore : coreReqs)
-            for (String myCoreName : coreNames)
-                if (myCoreName.equals(schoolCore))
-                    myCoreReqs.add(schoolCore);
-    }
-
-	/*public static String[] scrapeCourseInfo(int courseID) {
-		String[] returnMe = new String[6];
-		try {
-			int addMe;
-			URL url  = new URL("http://www.scu.edu/courseavail/class/?fuseaction=details&class_nbr="+courseID+"&term=3700");
-			URLConnection uc = url.openConnection();
-			BufferedReader in = new BufferedReader(new InputStreamReader(uc.getInputStream(), "UTF-8"));
-			String inputLine;
-			int lineCounter = 1;
-			//StringBuilder a = new StringBuilder();
-			boolean isFound = false;
-			boolean isAdjusted = false;
-			while ((inputLine = in.readLine()) != null && !isFound) {
-				//System.out.println(lineCounter+"\t"+inputLine);
-				//a.append(inputLine);
-				if (lineCounter == 117) {
-					int starti = inputLine.indexOf("\">")+2;
-					int endi = inputLine.indexOf("</");
-					returnMe[5] = inputLine.substring(starti,endi);
-				}
-				else if (lineCounter == 123) {
-					int starti = inputLine.indexOf(">")+1;
-					int endi = inputLine.indexOf("</");
-					returnMe[0] = inputLine.substring(starti,endi);
-				}
-				else if (inputLine.contains("Books")) {
-					lineCounter = 165;
-					isAdjusted = true;
-				}
-				if (isAdjusted) {
-					if (lineCounter == 168) {
-						int starti = inputLine.indexOf("<td>")+4;
-						int endi = inputLine.indexOf("</");
-						returnMe[1] = inputLine.substring(starti,endi);
-					}
-					else if (lineCounter == 169) {
-						int starti = inputLine.indexOf("<td>")+4;
-						int endi = inputLine.indexOf(",");
-						if (endi == -1)
-							endi = inputLine.indexOf("</");
-						returnMe[2] = inputLine.substring(starti,endi);
-					}
-					else if (lineCounter == 170) {
-						int starti = inputLine.indexOf("<td>")+4;
-						int endi = inputLine.indexOf("<br");
-						returnMe[3] = inputLine.substring(starti,endi);
-					}
-					else if (lineCounter == 171) {
-						int starti = inputLine.indexOf("<td>")+4;
-						int endi = inputLine.indexOf("<br");
-						String str = inputLine.substring(starti,endi);
-						str = str.substring(0,5)+str.substring(8,14);
-						returnMe[4] = str;
-					}
-				}
-				lineCounter++;
-			}
-			in.close();
-		}
-		catch (NumberFormatException e) {
-			e.printStackTrace();
-		}
-		catch(StringIndexOutOfBoundsException e) {
-			//e.printStackTrace();
-		}
-		catch(IOException e) {
-			e.printStackTrace();
-		}
-		course = returnMe[5];
-		title = returnMe[0];
-		instructorL = returnMe[2];
-		days = returnMe[3];
-		times = returnMe[4];
-		return returnMe;
-	}
-
-	public static ArrayList<String> getCoreReqs(int courseID) {
-		ArrayList<String> returnMe = new ArrayList<String>();
-		try {
-			URL url  = new URL("http://www.scu.edu/courseavail/class/?fuseaction=details&class_nbr="+courseID+"&term=3700");
-			URLConnection uc = url.openConnection();
-			BufferedReader in = new BufferedReader(new InputStreamReader(uc.getInputStream(), "UTF-8"));
-			String inputLine;
-			int lineCounter = 1;
-			//StringBuilder a = new StringBuilder();
-			boolean isFound = false;
-			boolean isAdjusted = false;
-			while ((inputLine = in.readLine()) != null && !isFound) {
-				//a.append(inputLine);
-				if (inputLine.contains("Core Attribute Keys")) {
-					lineCounter = 145;
-					isAdjusted = true;
-				}
-				if (isAdjusted && lineCounter == 147) {
-					for (int i=0; i<myCores.length; i++) {
-						if (inputLine.contains(myCores[i]))
-							returnMe.add(coreNames[i]);
-					}
-					isFound = true;
-				}
-				lineCounter++;
-			}
-			in.close();
-		}
-		catch (NumberFormatException e) {
-			e.printStackTrace();
-		}
-		catch(StringIndexOutOfBoundsException e) {
-			//e.printStackTrace();
-		}
-		catch(IOException e) {
-			e.printStackTrace();
-		}
-		return returnMe;
-	}*/
-
-    //Getters
+    // Getters
     public int getCourseID() {return courseID;}
     public int getTermID() {return termID;}
     public String getSubject() {return subject;}
@@ -496,7 +424,44 @@ public class SCUCourse implements Comparable<SCUCourse> {
     public String getQuarter() {return term.substring(0,1)+term.substring(term.length()-2,term.length());}
     public String getDownFrom() {return downFrom;}
 
-    //Setters
+    /**
+     * Get basic info about the course, including course, title, course number,
+     * instructor, date and time, and core requirements satisfied by the
+     * course.
+     *
+     * @return basic course info
+     */
+    public String[] getInfo() {
+        String[] info = {course,title,""+courseID,instructorL,days,times,""+coreReqs};
+        return info;
+    }
+
+    /**
+     * Get the info from all the fields of the SCUCourse in an array. This
+     * array can be used to construct an SCUCourse using the second constructor
+     * as well.
+     *
+     * @return an array representation of the course
+     */
+    public String[] getAllInfo() {
+        String[] info = {""+courseID,""+termID,subject,course,title,description,""+coreReqs,""+pathwayReqs,
+                ""+myCoreReqs,enrollmentInfo,""+maxUnits,""+minUnits,instructorL,instructorF,days,times,location,
+                ""+seatsRemaining,term,studentLevel,school};
+        return info;
+    }
+
+    /**
+     * Get only the info needed for the SeatWatcher: course, title, course
+     * number, instructor, date and time, and seats remaining.
+     *
+     * @return info needed for the SeatWatcher
+     */
+    public String[] getSWInfo() {
+        String[] info = {course,title,""+courseID,instructorL,days,times,""+checkDangerZone(seatsRemaining)+downFrom};
+        return info;
+    }
+
+    // Setters
     public void setCourseID(int courseID) {this.courseID = courseID;}
     public void setTermID(int termID) {this.termID = termID;}
     public void setSubject(String subject) {this.subject = subject;}
@@ -518,56 +483,4 @@ public class SCUCourse implements Comparable<SCUCourse> {
     public void setTerm(String term) {this.term = term;}
     public void setStudentLevel(String studentLevel) {this.studentLevel = studentLevel;}
     public void setSchool(String school) {this.school = school;}
-
-    public String toString() {
-        return course+" | "+title+" | "+courseID+" | "+instructorL+" | "+days+" | "+times+" | "+coreReqs;
-    }
-
-    public String[] getInfo() {
-        String[] returnMe = {course,title,""+courseID,instructorL,days,times,""+coreReqs};
-        return returnMe;
-    }
-
-    public String[] getMoreInfo() {
-        String[] returnMe = {term,studentLevel,school,""+seatsRemaining,description,""+myCoreReqs,""+pathwayReqs};
-        return returnMe;
-    }
-
-    public String[] getEvenMoreInfo() {
-        String[] returnMe = {""+maxUnits,""+minUnits,enrollmentInfo,location};
-        return returnMe;
-    }
-
-    public String[] getAllInfo() {
-        String[] returnMe = {""+courseID,""+termID,subject,course,title,description,""+coreReqs,""+pathwayReqs,""+myCoreReqs,enrollmentInfo,
-                ""+maxUnits,""+minUnits,instructorL,instructorF,days,times,location,""+seatsRemaining,term,studentLevel,school};
-        return returnMe;
-    }
-
-    public String[] getSWInfo() {
-        String[] returnMe = {course,title,""+courseID,instructorL,days,times,""+checkDangerZone(seatsRemaining)+downFrom};
-        return returnMe;
-    }
-
-    public String getSWString() {
-        return course+"\t| "+seatsRemaining+" seats"+downFrom;
-    }
-
-    @Override
-    public int compareTo(SCUCourse compareMe) {
-        return this.course.compareTo(compareMe.getCourse());
-    }
-
-    public static String checkDangerZone(int seats) {
-        String returnMe = "";
-        if (seats >= 30)
-            returnMe += ANSI_GREEN;
-        else if (seats >= 15)
-            returnMe += ANSI_YELLOW;
-        else if (seats >= 1)
-            returnMe += ANSI_RED;
-        else
-            returnMe += ANSI_BLUE;
-        return returnMe + seats + ANSI_RESET;
-    }
 }
