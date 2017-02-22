@@ -2,10 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b885a3e5-e137-401f-841a-4f7d8632571b" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/SeatWatcher.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/SCUCourse.java" afterPath="$PROJECT_DIR$/src/SCUCourse.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/SCUCourseTools.java" afterPath="$PROJECT_DIR$/src/SCUCourseTools.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -28,8 +24,8 @@
       <file leaf-file-name="SCUCourse.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/SCUCourse.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="7050">
-              <caret line="470" column="38" lean-forward="true" selection-start-line="470" selection-start-column="38" selection-end-line="470" selection-end-column="38" />
+            <state relative-caret-position="-6503">
+              <caret line="13" column="0" lean-forward="true" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#8013#8014#0" expanded="true" />
@@ -41,37 +37,36 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SCUCourseTools.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="SCUCourseTools.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/SCUCourseTools.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="20" column="35" lean-forward="true" selection-start-line="20" selection-start-column="35" selection-end-line="20" selection-end-column="35" />
+            <state relative-caret-position="378">
+              <caret line="76" column="47" lean-forward="false" selection-start-line="76" selection-start-column="47" selection-end-line="76" selection-end-column="47" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#SCUCourseTools#0;class#SCUCourseTools#0" expanded="false" />
-                <element signature="method#setup#0;class#SCUCourseTools#0" expanded="false" />
                 <element signature="method#help#0;class#SCUCourseTools#0" expanded="false" />
                 <element signature="method#run#0;class#SCUCourseTools#0" expanded="false" />
                 <element signature="method#doAction#0;class#SCUCourseTools#0" expanded="false" />
-                <element signature="e#10564#10574#0" expanded="true" />
+                <element signature="e#10471#10481#0" expanded="true" />
                 <element signature="method#schedule#0;class#SCUCourseTools#0" expanded="false" />
-                <element signature="e#17099#17107#0" expanded="true" />
+                <element signature="e#16917#16925#0" expanded="true" />
                 <element signature="method#displaySchedule#0;class#SCUCourseTools#0" expanded="false" />
                 <element signature="method#findMinor#0;class#SCUCourseTools#0" expanded="false" />
                 <element signature="method#findMajor#0;class#SCUCourseTools#0" expanded="false" />
                 <element signature="method#displayClassList#0;class#SCUCourseTools#0" expanded="false" />
                 <element signature="method#findByX#0;class#SCUCourseTools#0" expanded="false" />
-                <element signature="e#22395#22405#0" expanded="true" />
+                <element signature="e#22166#22176#0" expanded="true" />
                 <element signature="method#getTermID#0;class#SCUCourseTools#0" expanded="false" />
                 <element signature="method#getFirstCourse#0;class#SCUCourseTools#0" expanded="false" />
                 <element signature="method#displayDetails#0;class#SCUCourseTools#0" expanded="false" />
                 <element signature="method#findDoubleCore#0;class#SCUCourseTools#0" expanded="false" />
                 <element signature="method#findMyDoubleCore#0;class#SCUCourseTools#0" expanded="false" />
-                <element signature="e#28226#28234#0" expanded="true" />
+                <element signature="e#27997#28005#0" expanded="true" />
                 <element signature="method#loadSW#0;class#SCUCourseTools#0" expanded="false" />
                 <element signature="method#updateFile#0;class#SCUCourseTools#0" expanded="false" />
-                <element signature="e#30765#30773#0" expanded="true" />
-                <element signature="e#30828#30836#0" expanded="true" />
+                <element signature="e#30523#30531#0" expanded="true" />
+                <element signature="e#30586#30594#0" expanded="true" />
                 <element signature="method#seatWatcher#0;class#SCUCourseTools#0" expanded="false" />
                 <element signature="method#showMyCourses#0;class#SCUCourseTools#0" expanded="false" />
                 <element signature="method#removeFromSeatWatch#0;class#SCUCourseTools#0" expanded="false" />
@@ -79,20 +74,23 @@
                 <element signature="method#addToSeatWatch#1;class#SCUCourseTools#0" expanded="false" />
                 <element signature="method#scrapeToFile#0;class#SCUCourseTools#0" expanded="false" />
                 <element signature="method#configData#0;class#SCUCourseTools#0" expanded="false" />
-                <element signature="e#35741#35749#0" expanded="true" />
+                <element signature="e#35499#35507#0" expanded="true" />
                 <element signature="method#loadData#0;class#SCUCourseTools#0" expanded="false" />
-                <element signature="method#formatLine#0;class#SCUCourseTools#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SeatWatcher.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="SeatWatcher.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/SeatWatcher.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="8" column="5" lean-forward="false" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
-              <folding />
+            <state relative-caret-position="2055">
+              <caret line="137" column="25" lean-forward="true" selection-start-line="137" selection-start-column="25" selection-end-line="137" selection-end-column="25" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#1331#1339#0" expanded="true" />
+                <element signature="e#1394#1402#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -126,11 +124,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>help.txt</find>
-      <find>help</find>
-      <find>help()</find>
-      <find>File(</find>
-      <find>System.out.</find>
       <find>loading</find>
       <find>overflow</find>
       <find>display(</find>
@@ -156,6 +149,11 @@
       <find>doesEx</find>
       <find>removeFromSeatWatch</find>
       <find>getTentative</find>
+      <find>helpstr</find>
+      <find>input</find>
+      <find>displayClass</find>
+      <find>seatWat</find>
+      <find>formatLine</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -536,7 +534,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1280" height="773" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -554,7 +552,7 @@
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30823863" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18515626" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18515626" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32954547" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -732,8 +730,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/SCUCourse.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7050">
-          <caret line="470" column="38" lean-forward="true" selection-start-line="470" selection-start-column="38" selection-end-line="470" selection-end-column="38" />
+        <state relative-caret-position="-6503">
+          <caret line="13" column="0" lean-forward="true" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#8013#8014#0" expanded="true" />
@@ -744,44 +742,35 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/SeatWatcher.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="5" lean-forward="false" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/SCUCourseTools.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" column="35" lean-forward="true" selection-start-line="20" selection-start-column="35" selection-end-line="20" selection-end-column="35" />
+        <state relative-caret-position="378">
+          <caret line="76" column="47" lean-forward="false" selection-start-line="76" selection-start-column="47" selection-end-line="76" selection-end-column="47" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#SCUCourseTools#0;class#SCUCourseTools#0" expanded="false" />
-            <element signature="method#setup#0;class#SCUCourseTools#0" expanded="false" />
             <element signature="method#help#0;class#SCUCourseTools#0" expanded="false" />
             <element signature="method#run#0;class#SCUCourseTools#0" expanded="false" />
             <element signature="method#doAction#0;class#SCUCourseTools#0" expanded="false" />
-            <element signature="e#10564#10574#0" expanded="true" />
+            <element signature="e#10471#10481#0" expanded="true" />
             <element signature="method#schedule#0;class#SCUCourseTools#0" expanded="false" />
-            <element signature="e#17099#17107#0" expanded="true" />
+            <element signature="e#16917#16925#0" expanded="true" />
             <element signature="method#displaySchedule#0;class#SCUCourseTools#0" expanded="false" />
             <element signature="method#findMinor#0;class#SCUCourseTools#0" expanded="false" />
             <element signature="method#findMajor#0;class#SCUCourseTools#0" expanded="false" />
             <element signature="method#displayClassList#0;class#SCUCourseTools#0" expanded="false" />
             <element signature="method#findByX#0;class#SCUCourseTools#0" expanded="false" />
-            <element signature="e#22395#22405#0" expanded="true" />
+            <element signature="e#22166#22176#0" expanded="true" />
             <element signature="method#getTermID#0;class#SCUCourseTools#0" expanded="false" />
             <element signature="method#getFirstCourse#0;class#SCUCourseTools#0" expanded="false" />
             <element signature="method#displayDetails#0;class#SCUCourseTools#0" expanded="false" />
             <element signature="method#findDoubleCore#0;class#SCUCourseTools#0" expanded="false" />
             <element signature="method#findMyDoubleCore#0;class#SCUCourseTools#0" expanded="false" />
-            <element signature="e#28226#28234#0" expanded="true" />
+            <element signature="e#27997#28005#0" expanded="true" />
             <element signature="method#loadSW#0;class#SCUCourseTools#0" expanded="false" />
             <element signature="method#updateFile#0;class#SCUCourseTools#0" expanded="false" />
-            <element signature="e#30765#30773#0" expanded="true" />
-            <element signature="e#30828#30836#0" expanded="true" />
+            <element signature="e#30523#30531#0" expanded="true" />
+            <element signature="e#30586#30594#0" expanded="true" />
             <element signature="method#seatWatcher#0;class#SCUCourseTools#0" expanded="false" />
             <element signature="method#showMyCourses#0;class#SCUCourseTools#0" expanded="false" />
             <element signature="method#removeFromSeatWatch#0;class#SCUCourseTools#0" expanded="false" />
@@ -789,9 +778,20 @@
             <element signature="method#addToSeatWatch#1;class#SCUCourseTools#0" expanded="false" />
             <element signature="method#scrapeToFile#0;class#SCUCourseTools#0" expanded="false" />
             <element signature="method#configData#0;class#SCUCourseTools#0" expanded="false" />
-            <element signature="e#35741#35749#0" expanded="true" />
+            <element signature="e#35499#35507#0" expanded="true" />
             <element signature="method#loadData#0;class#SCUCourseTools#0" expanded="false" />
-            <element signature="method#formatLine#0;class#SCUCourseTools#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/SeatWatcher.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2055">
+          <caret line="137" column="25" lean-forward="true" selection-start-line="137" selection-start-column="25" selection-end-line="137" selection-end-column="25" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1331#1339#0" expanded="true" />
+            <element signature="e#1394#1402#0" expanded="true" />
           </folding>
         </state>
       </provider>

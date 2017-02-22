@@ -23,9 +23,8 @@ import java.lang.ArrayIndexOutOfBoundsException;
  * @author Eric Van Lare
  */
 public class SCUCourseTools {
-    private String input;
     private ArrayList<String[]> seatWatchCourses;
-    private Hashtable<String,String[][]> allCoursesAndTerms;
+    protected static Hashtable<String,String[][]> allCoursesAndTerms;
     private Hashtable<String,int[]> quarterInfo;
     private String[] quarterNames = {"S17","W17","F16","S16","W16","F15","S15","W15","F14"};
     private int[][] quarterIDs= {{3840,50000,53000},
@@ -37,25 +36,25 @@ public class SCUCourseTools {
                                 {3640,18000,21000},
                                 {3620,14000,17000},
                                 {3600,10000,13000}};
-    private String[][] descriptions = {{"Course","Title","ID","Instructor","Day","Times","Core"},
+    protected static String[][] descriptions = {{"Course","Title","ID","Instructor","Day","Times","Core"},
             {"Course","Title","ID","Instructor","Day","Times","Seats Remaining"}};
 
     //change these when adding a new quarter
     private int currentQuarter;
     private String currentQuarterName;
-    private int currentFirstCourse;
+    protected static int currentFirstCourse;
 
     private String lastCommand;
     private String secondLastCommand;
     private String[] lastArgs;
     private String[] secondLastArgs;
-    private ArrayList<String> helpStrs;
 
-    private int[][] spaces = {{10,34,5,22,4,11,30},{10,34,5,22,4,11,20}};
+    private static int[][] spaces = {{10,34,5,22,4,11,30},{10,34,5,22,4,11,20}};
 
     private ArrayList<ArrayList<String>> schedules;
 
     private ShellDisplay display;
+    private SeatWatcher seatWatcher;
 
     public SCUCourseTools() {
         setup();
@@ -63,7 +62,7 @@ public class SCUCourseTools {
     }
 
     public static void main(String[] args) {
-        SCUCourseTools program = new SCUCourseTools();
+        new SCUCourseTools();
     }
 
     private void setup() {
@@ -74,7 +73,8 @@ public class SCUCourseTools {
 
         display = new ShellDisplay();
 
-        seatWatchCourses = new ArrayList<String[]>();
+//        seatWatchCourses = new ArrayList<String[]>();
+        seatWatcher = new SeatWatcher(display);
         allCoursesAndTerms = new Hashtable<String,String[][]>();
 
         quarterInfo = new Hashtable<String,int[]>();
@@ -94,7 +94,6 @@ public class SCUCourseTools {
         schedules = new ArrayList<ArrayList<String>>();
 
         loadSW(currentQuarter);
-        helpStrs = new ArrayList<String>();
         help();
     }
 
@@ -103,11 +102,8 @@ public class SCUCourseTools {
             File helpFile = new File("text/help.txt");
             if (helpFile.exists()) {
                 BufferedReader br = new BufferedReader(new FileReader(helpFile.getAbsoluteFile()));
-                int i = 0;
-                for (String line = br.readLine(); line != null; line = br.readLine()){
+                for (String line = br.readLine(); line != null; line = br.readLine())
                     display.addLine(line);
-                    helpStrs.add(line);
-                }
                 br.close();
             }
         } catch (IOException exception) {
@@ -119,7 +115,7 @@ public class SCUCourseTools {
     private void run() {
         while (true) {
             try {
-                input = display.readLine();
+                String input = display.readLine();
                 String[] allLines = input.split(" ");
                 String argc = allLines[0];
                 String[] argv = {};
@@ -327,7 +323,7 @@ public class SCUCourseTools {
                     allCoursesEver = findByX("quarter", allCoursesEver, currentQuarterName);
                 }
                 if (doDisplay) {
-                    displayClassList(allCoursesEver, "search");
+                    displayClassList(allCoursesEver);
                 }
             }
         }
@@ -358,9 +354,6 @@ public class SCUCourseTools {
         }
         else if (argc.equals("mydoubledip") || argc.equals("mdd")) {
             findMyDoubleCore();
-        }
-        else if (argc.equals("coremanager") || argc.equals("cm")) {
-
         }
         else {
             display.addLine("Please enter a valid command");
@@ -429,7 +422,6 @@ public class SCUCourseTools {
         for (int i=0; i<39; i++)
             for (int j=0; j<5; j++)
                 spots[i][j]="                       ";
-        int lineCount = 0;
         for (int i=1; i<schedule.size(); i++) {
             SCUCourse course = new SCUCourse(Integer.parseInt(schedule.get(i)),currentQuarter);
             int startH = Integer.parseInt(course.getTimes().substring(0,2));
@@ -526,7 +518,7 @@ public class SCUCourseTools {
         display.display();
     }
 
-    private void displayClassList(ArrayList<String[]> allCoursesEver, String displayType) {
+    private void displayClassList(ArrayList<String[]> allCoursesEver) {
         ArrayList<String> courses = new ArrayList<>();
         for (String[] info : allCoursesEver) {
             courses.add(formatLine((new SCUCourse(info)).getInfo(),0));
@@ -716,8 +708,8 @@ public class SCUCourseTools {
             File swCourseFile = new File("text/swcourses" + termID + ".txt");
             if (swCourseFile.exists()) {
                 BufferedReader br = new BufferedReader(new FileReader(swCourseFile.getAbsoluteFile()));
-                int i = 0;
-                for (String line = br.readLine(); line != null; i++){
+                String line = br.readLine();
+                while (line != null) {
                     try {
                         addToSeatWatch(Integer.parseInt(line.substring(0,5)),termID,currentFirstCourse,
                                 line.substring(6,line.length()));
@@ -913,7 +905,7 @@ public class SCUCourseTools {
         }
     }
 
-    public String formatLine(String[] info, int format) {
+    public static String formatLine(String[] info, int format) {
         String returnMe = " ";
         for (int i=0; i<info.length-1; i++) {
             if (info[i] == null || info[i].equals("null"))
