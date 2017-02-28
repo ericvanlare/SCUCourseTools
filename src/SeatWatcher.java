@@ -2,7 +2,9 @@ import java.io.*;
 import java.util.ArrayList;
 
 /**
- *
+ * Keeps track of classes specified by the user and updates the seats from
+ * CourseAvail. Courses can be added or removed, and seats can be updated on
+ * command.
  *
  * @author Eric Van Lare
  */
@@ -10,12 +12,56 @@ public class SeatWatcher {
     private ArrayList<String[]> seatWatchCourses;
     private ShellDisplay display;
 
+    /**
+     * Create a SeatWatcher that interacts with the given display.
+     *
+     * @param display ShellDisplay for IO
+     */
     public SeatWatcher(ShellDisplay display) {
         seatWatchCourses = new ArrayList<String[]>();
         this.display = display;
     }
 
-    private void loadSW(int termID) {
+    /**
+     * Add the given course to the seat watcher.
+     *
+     * @param courseID 5-digit course ID number
+     * @param termID 4-digit term ID number
+     * @param firstCourse first course in the term
+     * @param seats number of seats remaining in course
+     */
+    public void addToSeatWatch(int courseID , int termID, int firstCourse, String seats) {
+        boolean doesExist = false;
+        for (int i=0; i<seatWatchCourses.size(); i++)
+            if (seatWatchCourses.get(i)[0].substring(1,6).equals(""+courseID))
+                doesExist = true;
+
+        if (!doesExist) {
+            if (seats != "~~~")
+                SCUCourseTools.allCoursesAndTerms.get(""+termID)[courseID-firstCourse][17] = seats;
+            String[] info = SCUCourseTools.allCoursesAndTerms.get(""+termID)[courseID-firstCourse];
+            seatWatchCourses.add(info);
+        }
+    }
+
+    /**
+     * Add the given course to the seat watcher without knowing the seats remaining.
+     *
+     * @param courseID 5-digit course ID number
+     * @param termID 4-digit term ID number
+     * @param firstCourse first course in the term
+     */
+    public void addToSeatWatch(int courseID , int termID, int firstCourse) {
+        addToSeatWatch(courseID, termID, firstCourse, "~~~");
+    }
+
+    /**
+     * Load seat watcher data from the text/swcoursesXXXX.txt file where XXXX
+     * is the term ID.
+     *
+     * @param termID 4-digit term ID number
+     */
+    public void loadSW(int termID) {
         try {
             File swCourseFile = new File("text/swcourses" + termID + ".txt");
             if (swCourseFile.exists()) {
@@ -37,7 +83,57 @@ public class SeatWatcher {
         }
     }
 
-    private void updateFile(int termID) {
+    /**
+     * Remove the specified course from the seat watcher.
+     *
+     * @param courseID 5-digit course ID number
+     */
+    public void removeFromSeatWatch(int courseID) {
+        for (int i=0; i<seatWatchCourses.size(); i++) {
+            if (seatWatchCourses.get(i)[0].substring(1,6).equals(""+courseID)) {
+                seatWatchCourses.remove(i);
+            }
+        }
+    }
+
+    /**
+     * Display all courses being watched. Update the seats if true is passed
+     * in, just displays them otherwise.
+     *
+     * @param update update seats from courses if true
+     */
+    public void showMyCourses(boolean update) {
+        display.loading(3);
+        //Insertion sort
+        for (int i=0; i<seatWatchCourses.size(); i++) {
+            String[] temp = seatWatchCourses.get(i);
+            int j;
+            for (j=i-1; j>=0 && temp[3].compareTo(seatWatchCourses.get(j)[3])<0; j--)
+                seatWatchCourses.set(j+1,seatWatchCourses.get(j));
+            seatWatchCourses.set(j+1,temp);
+        }
+        display.addLine(SCUCourseTools.formatLine(SCUCourseTools.descriptions[1],1));
+        String dashes = "";
+        for (int i=0; i<27; i++)
+            dashes += "-----";
+        display.addLine(dashes);
+        for (String[] str : seatWatchCourses) {
+            SCUCourse course = new SCUCourse(str);
+            str[str.length-4] = ""+(update?course.updateSeats():course.getSeatsRemaining());
+            String addMe = SCUCourseTools.formatLine(course.getSWInfo(),1);
+            display.addLine(addMe);
+        }
+        display.display();
+    }
+
+    /**
+     * Update the text/swcoursesXXXX.txt file where XXXX is the term ID. Stores
+     * the course numbers as well as the seats remaining in each course. One
+     * course per line, uses '*' delimiter.
+     *
+     * @param termID 4-digit term ID number
+     */
+    public void updateFile(int termID) {
         ArrayList<String> seatsRemaining = new ArrayList<String>();
         ArrayList<String> courseIDs = new ArrayList<String>();
         for (String[] arr : seatWatchCourses) {
@@ -62,90 +158,5 @@ public class SeatWatcher {
         } catch (IOException exception) {
             exception.printStackTrace();
         }
-    }
-
-    public String seatWatcher() {
-        String returnMe = "";
-        display.loading(3);
-        //Insertion sort
-        for (int i=0; i<seatWatchCourses.size(); i++) {
-            String[] temp = seatWatchCourses.get(i);
-            int j;
-            for (j=i-1; j>=0 && temp[3].compareTo(seatWatchCourses.get(j)[3])<0; j--)
-                seatWatchCourses.set(j+1,seatWatchCourses.get(j));
-            seatWatchCourses.set(j+1,temp);
-        }
-        display.addLine(SCUCourseTools.formatLine(SCUCourseTools.descriptions[1],1));
-        String dashes = "";
-        for (int i=0; i<27; i++)
-            dashes += "-----";
-        display.addLine(dashes);
-        for (String[] str : seatWatchCourses) {
-            SCUCourse course = new SCUCourse(str);
-            str[str.length-4] = ""+course.updateSeats();
-            String addMe = SCUCourseTools.formatLine(course.getSWInfo(),1);
-            display.addLine(addMe);
-            returnMe += addMe;
-        }
-        display.display();
-        return returnMe;
-    }
-
-    public String showMyCourses() {
-        String returnMe = "";
-        display.loading(3);
-        //Insertion sort
-        for (int i=0; i<seatWatchCourses.size(); i++) {
-            String[] temp = seatWatchCourses.get(i);
-            int j;
-            for (j=i-1; j>=0 && temp[3].compareTo(seatWatchCourses.get(j)[3])<0; j--)
-                seatWatchCourses.set(j+1,seatWatchCourses.get(j));
-            seatWatchCourses.set(j+1,temp);
-        }
-        display.addLine(SCUCourseTools.formatLine(SCUCourseTools.descriptions[1],1));
-        String dashes = "";
-        for (int i=0; i<27; i++)
-            dashes += "-----";
-        display.addLine(dashes);
-        for (String[] str : seatWatchCourses) {
-            SCUCourse course = new SCUCourse(str);
-            str[str.length-4] = ""+course.getSeatsRemaining();
-            String addMe = SCUCourseTools.formatLine(course.getSWInfo(),1);
-            display.addLine(addMe);
-            returnMe += addMe;
-        }
-        display.display();
-        return returnMe;
-    }
-
-    private void removeFromSeatWatch(int courseID) {
-        for (int i=0; i<seatWatchCourses.size(); i++) {
-            if (seatWatchCourses.get(i)[0].substring(1,6).equals(""+courseID)) {
-                seatWatchCourses.remove(i);
-            }
-        }
-    }
-
-    private void addToSeatWatch(int courseID , int termID, int firstCourse, String seats) {
-        boolean doesExist = false;
-        for (int i=0; i<seatWatchCourses.size(); i++) {
-            //System.out.println(""+courseID+" "+seatWatchCourses.get(i)[0].substring(1,6));
-            if (seatWatchCourses.get(i)[0].substring(1,6).equals(""+courseID)) {
-                doesExist = true;
-            }
-        }
-        //display.loading(3);
-        if (!doesExist) {
-            if (seats != "~~~")
-                SCUCourseTools.allCoursesAndTerms.get(""+termID)[courseID-firstCourse][17] = seats;
-            String[] info = SCUCourseTools.allCoursesAndTerms.get(""+termID)[courseID-firstCourse];
-            boolean isRunning = true;
-            seatWatchCourses.add(info);
-            //seatWatcher();
-        }
-    }
-
-    private void addToSeatWatch(int courseID , int termID, int firstCourse) {
-        addToSeatWatch(courseID, termID, firstCourse, "~~~");
     }
 }

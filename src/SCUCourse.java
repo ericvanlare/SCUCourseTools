@@ -41,26 +41,26 @@ public class SCUCourse implements Comparable<SCUCourse> {
     // Arrays of identifiers and their names, used arrays instead of hashtable for compactability
     private String[] foundations        = {"F_CTW1","F_CTW2","F_CI1","F_CI2","F_SLA1","F_SLA2","F_MATH","F_RTC1"};
     private String[] foundationsNames   = {"CTW 1","CTW 2","C&I 1","C&I 2","Second Language 1","Second Language 2",
-                                            "Math","RTC 1"};
+            "Math","RTC 1"};
     private String[] explorations       = {"E_ETH","E_CE","E_DV","E_ARTS","E_SOSC","E_NTSC","E_RTC2","E_CI3","E_STS",
-                                            "E_RTC3"};
+            "E_RTC3"};
     private String[] explorationsNames  = {"Ethics","Civil Engagement","Diversity","Arts","Social Science",
-                                            "Natural Science","RTC 2","C&I 3","Science Technology Society","RTC 3",
-                                            "ELSJ"};
+            "Natural Science","RTC 2","C&I 3","Science Technology Society","RTC 3",
+            "ELSJ"};
     private String[] integrations       = {"I_AW","I_EL"};
     private String[] integrationsNames  = {"Advanced Writing","ELSJ"};
     private String[] pathways           = {"I_PTHAE","I_PTHAMS","I_PTHB","I_PTHCHD","I_PTHCINST","I_PTHDEM","I_PTHDA",
-                                            "I_PTHDT","I_PTHFHP","I_PTHGSB","I_PTHGH","I_PTHHR","I_PTHIS","I_PTHJA",
-                                            "I_PTHLSJ","I_PTHLPOSC","I_PTHPR","I_PTHPP","I_PTHPS","I_PTHRPSI","I_PTHS",
-                                            "I_PTHVST","I_PTHV"};
+            "I_PTHDT","I_PTHFHP","I_PTHGSB","I_PTHGH","I_PTHHR","I_PTHIS","I_PTHJA",
+            "I_PTHLSJ","I_PTHLPOSC","I_PTHPR","I_PTHPP","I_PTHPS","I_PTHRPSI","I_PTHS",
+            "I_PTHVST","I_PTHV"};
     private String[] pathwaysNames      = {"Applied Ethics","American Studies","Beauty","Childhood, Family & Society",
-                                            "Cinema Studies","Democracy","The Digital Age","Design Thinking",
-                                            "Food, Hunger, Poverty Environment","Gender, Sexuality & the Body",
-                                            "Global Health","Human Rights","Islamic Studies","Justice & the Arts",
-                                            "Law & Social Justice","Leading People, Organizations & Social Change",
-                                            "Politics & Religion","Public Policy","Paradigm Shifts",
-                                            "Race Place & Social Inequities","Sustainability",
-                                            "Values in Science & Technology","Vocation"};
+            "Cinema Studies","Democracy","The Digital Age","Design Thinking",
+            "Food, Hunger, Poverty Environment","Gender, Sexuality & the Body",
+            "Global Health","Human Rights","Islamic Studies","Justice & the Arts",
+            "Law & Social Justice","Leading People, Organizations & Social Change",
+            "Politics & Religion","Public Policy","Paradigm Shifts",
+            "Race Place & Social Inequities","Sustainability",
+            "Values in Science & Technology","Vocation"};
     private String[] myCores            = {"E_ETH","E_DV","E_RTC2","E_RTC3","I_EL"};
     private String[] coreNames          = {"Ethics","Diversity","RTC 2","RTC 3","ELSJ"};
 
@@ -68,8 +68,8 @@ public class SCUCourse implements Comparable<SCUCourse> {
      * Construct an SCUCourse object from the course and term IDs, using
      * CourseAvail to find the rest of the info on the course.
      *
-     * @param courseID
-     * @param termID
+     * @param courseID 5-digit course ID number
+     * @param termID 4-digit term ID number
      */
     public SCUCourse(int courseID, int termID) {
         this.courseID = courseID;
@@ -85,12 +85,10 @@ public class SCUCourse implements Comparable<SCUCourse> {
      * information about the class. Doesn't update any info from courseavail
      * in the constructor itself.
      *
-     * @param info
+     * @param info array of info for course
      */
     public SCUCourse(String[] info) {
-        String[] returnMe = {""+courseID,""+termID,subject,course,title,description,""+coreReqs,""+pathwayReqs,
-                             ""+myCoreReqs,enrollmentInfo,""+maxUnits,""+minUnits,instructorL,instructorF,days,times,
-                             location,""+seatsRemaining,term,studentLevel,school};
+
         courseID=Integer.parseInt(info[0].substring(1,6));
         termID=Integer.parseInt(info[1]);
         subject=info[2];
